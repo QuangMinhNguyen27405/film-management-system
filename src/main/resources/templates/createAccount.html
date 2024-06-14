@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
+        crossorigin="anonymous">
+    <link rel="stylesheet" 
+        href="css/styles.css">
+</head>
+<body>
+    <div class="container mt-5 pt-5 d-flex justify-content-center">
+        <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-4 form-containert">
+            <form id="registration">
+                <h2 class="text-left">Account Register</h2>
+                <div>
+                    <input type="text" id="firstName" class="form-control" name="firstName" required maxlength="50"
+                            placeholder="First Name*">
+                    <span class="status text-success float-left ml-1 my-1" id="first_name_status"></span>
+                </div>
+                <div>
+                    <input type="text" id="lastName" class="form-control" name="lastName" required maxlength="50"
+                            placeholder="Last Name*">
+                    <span class="status text-success float-left ml-1 my-1" id="last_name_status"></span>
+                </div>
+
+                <div>
+                    <span class="status text-success float-left ml-1 my-1" id="email_status"></span>
+                    <input type="email" id="email" class="form-control" name="email" required maxlength="50"
+                            placeholder="Email*">
+                </div>
+                
+                <div>
+                    <span class="status text-success float-left ml-1 my-1" id="password_status"></span>
+                    <input type="password" id="password" class="form-control" name="password" required maxlength="50"
+                            placeholder="Create a Password*">
+                </div>
+
+                <div class="my-2">
+                    <ul class="password-requirements list-unstyled small text-muted my-1 ml-2">
+                        <lable><i class="fas fa-check-circle text-success"></i> The password must contain:</label>
+                        <li><i class="fas fa-check-circle text-success"></i> At least 1 uppercase letter</li>
+                        <li><i class="fas fa-check-circle text-success"></i> At least 1 lowercase letter</li>
+                        <li><i class="fas fa-check-circle text-success"></i> At least 1 special character</li>
+                        <li><i class="fas fa-check-circle text-success"></i> Minimum 8 characters in length</li>
+                    </ul>
+                    
+                </div>
+
+                <div class="mb-4">
+                    <input type="password" id="retype_password" class="form-control" name="retypePassword" required maxlength="50"
+                            placeholder="Confirm Password*">
+                    <span class="status text-success float-left ml-2 py-1" id="retype_password_status"></span>
+                </div>
+
+                <div class="form-group form-check mt-3">
+                    <input type="checkbox" class="form-check-input form-check-input-custom" id="agreement" required>
+                    <label class="form-check-label form-check-label-custom" for="agreement">I agree to the terms and conditions</label>
+                </div>
+                
+                <button type="submit" class="btn btn-custom btn-block">Create Account</button>
+            </form>
+        </div>
+    </div>
+    
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+        
+        $("#email").keyup(function(){
+            var regx_email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}(\.[a-zA-Z]{2,6})?$/;
+
+            var email_inp = $(this).val();
+            if(regx_email.test(email_inp)) {
+                $("#email").removeClass("is-invalid");
+                $("#email").addClass("is-valid");
+                $("#email_status").removeClass("text-danger");
+                $("#email").removeClass("border-danger");
+                $("#email_status").text("Valid");
+            }
+            else {
+                $("#email").addClass("is-invalid");
+                $("#email_status").addClass("text-danger");
+                $("#email").addClass("border-danger");
+                $("#email_status").text("Please enter a valid email address.");
+            }
+        });
+
+        $("#password").keyup(function(){
+            var regx_password = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            var password_inp = $(this).val();
+            if(regx_password.test(password_inp)) {
+                console.log("pass");
+                $("#password").removeClass("is-invalid");
+                $("#password").addClass("is-valid");
+                $("#password_status").removeClass("text-danger");
+                $("#password").removeClass("border-danger");
+                $("#password_status").text("Is Valid");
+            }
+            else {
+                $("#password").addClass("is-invalid");
+                $("#password_status").addClass("text-danger");
+                $("#password").addClass("border-danger");
+                $("#password_status").text("Please enter a valid password");
+            }
+        });
+
+        $("#retype_password").keyup(function(){
+
+            var password_inp = $("#password").val();
+            var retype_password_inp = $(this).val();
+
+            if(password_inp == retype_password_inp) {
+                $("#retype_password").removeClass("is-invalid");
+                $("#retype_password").addClass("is-valid");
+                $("#retype_password_status").removeClass("text-danger");
+                $("#retype_password").removeClass("border-danger");
+                $("#retype_password_status").text("Password Matched");
+            }
+            else {
+                $("#retype_password").addClass("is-invalid");
+                $("#retype_password").addClass("border-danger");
+                $("#retype_password_status").addClass("text-danger");
+                $("#retype_password_status").text("Password Must Match");
+            }
+        });
+
+        $("#registration").on("submit", function() {
+            event.preventDefault();
+            let firstName = $("#firstName").val();
+            let lastName = $("#lastName").val();
+            let email = $("#email").val();
+            let password = $("#password").val();
+            let retypePassword = document.getElementById("retypePassword").value;
+            let customer = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                retypePassword: retypePassword
+            };
+            console.log(customer);
+        });
+    });
+    
+</script>
+</html>

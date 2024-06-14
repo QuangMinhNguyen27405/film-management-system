@@ -117,4 +117,12 @@ public class Customer {
     public void setRentals(List<Rental> rentals) {
         this.rentals = rentals;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

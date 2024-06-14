@@ -55,6 +55,9 @@ public class Film {
     @Column(name = "full_text")
     private String fullText;
 
+    @Column(name = "url")
+    private String img;
+
     @ManyToMany
     @JoinTable(
             name = "film_category",
@@ -186,6 +189,14 @@ public class Film {
         this.categories = categories;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
     public Film() {
         this.lastUpdate = LocalDateTime.now();
     }
@@ -200,5 +211,6 @@ public class Film {
         this.rating = film.getRating();
         this.specialFeatures = film.getSpecialFeatures();
         this.fullText = film.getFullText();
+        this.lastUpdate = LocalDateTime.now();
     }
 }
