@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" 
         href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
-        crossorigin="anonymous">
+        crossorigin="http://127.0.0.1:5500">
     <link rel="stylesheet" 
-        href="css/styles.css">
+        th:href="@{css/styles.css}">
 </head>
 <body>
     <div class="container mt-5 pt-5 d-flex justify-content-center">
-        <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-4 form-containert">
-            <form id="registration">
-                <h2 class="text-left">Account Register</h2>
+        <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-4 form-container">
+            <form id="registration" th:action="@{/signup}">
+                <h2 class="text-left">Create an Account</h2>
                 <div>
                     <input type="text" id="firstName" class="form-control" name="firstName" required maxlength="50"
                             placeholder="First Name*">
@@ -42,7 +41,7 @@
 
                 <div class="my-2">
                     <ul class="password-requirements list-unstyled small text-muted my-1 ml-2">
-                        <lable><i class="fas fa-check-circle text-success"></i> The password must contain:</label>
+                        <li><i class="fas fa-check-circle text-success"></i> The password must contain:</li>
                         <li><i class="fas fa-check-circle text-success"></i> At least 1 uppercase letter</li>
                         <li><i class="fas fa-check-circle text-success"></i> At least 1 lowercase letter</li>
                         <li><i class="fas fa-check-circle text-success"></i> At least 1 special character</li>
@@ -51,10 +50,16 @@
                     
                 </div>
 
-                <div class="mb-4">
+                <div>
                     <input type="password" id="retype_password" class="form-control" name="retypePassword" required maxlength="50"
                             placeholder="Confirm Password*">
                     <span class="status text-success float-left ml-2 py-1" id="retype_password_status"></span>
+                </div>
+
+                <div class="mb-4">
+                    <input type="text" id="address" class="form-control" name="address" required maxlength="50"
+                            placeholder="Address*">
+                    <span class="status text-success float-left ml-2 py-1" id="address_status"></span>
                 </div>
 
                 <div class="form-group form-check mt-3">
@@ -68,6 +73,7 @@
     </div>
     
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         
@@ -136,17 +142,33 @@
             let lastName = $("#lastName").val();
             let email = $("#email").val();
             let password = $("#password").val();
-            let retypePassword = document.getElementById("retypePassword").value;
+            let address = $("#address").val();
             let customer = {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
                 password: password,
-                retypePassword: retypePassword
+                active: true,
+                address: {
+                    address: address
+                }
             };
             console.log(customer);
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                type: 'POST',
+                url: 'http://localhost:8080/api/v1/customer',
+                data: JSON.stringify(customer),
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+            document.getElementById("registration").reset();
         });
     });
-    
 </script>
 </html>

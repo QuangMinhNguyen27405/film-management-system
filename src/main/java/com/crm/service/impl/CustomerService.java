@@ -7,10 +7,12 @@ import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.AddressRepository;
 import com.crm.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
@@ -27,6 +29,7 @@ public class CustomerService {
         String address = customer.getAddress().getAddress();
         Optional<Address> dbAddress = addressRepository.findByAddress(address);
         dbAddress.ifPresent(customer::setAddress);
+
         return customerRepository.save(customer);
     }
 
@@ -36,6 +39,10 @@ public class CustomerService {
         if(dbCustomer.isEmpty()){
             throw new RecordNotFoundException("Customer with id " + customerId + " does not exist");
         }
+        //find for duplicate address
+        String address = customer.getAddress().getAddress();
+        Optional<Address> dbAddress = addressRepository.findByAddress(address);
+        dbAddress.ifPresent(customer::setAddress);
         //check if the changed email matches with any other email
         Customer existedEmail = customerRepository.findByEmaiExcludeId(customer.getEmail(), customerId);
         if(existedEmail != null){
@@ -51,5 +58,13 @@ public class CustomerService {
             throw new RecordNotFoundException("Customer with id " + customerId + " does not exist");
         }
         customerRepository.deleteById(customerId);
+    }
+
+    public Customer signIn(String email, String password){
+        Customer customer = customerRepository.findByEmail(email);
+        if(customer != null && password.equals( customer.getPassword() ) ){
+            return customer;
+        }
+        return null;
     }
 }

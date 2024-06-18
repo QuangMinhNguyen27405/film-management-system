@@ -8,8 +8,8 @@ body {
 }
 
 form h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 20 px;
+    font-size: 24 px;
 }
 
 label {
@@ -23,6 +23,11 @@ input[type="email"],
 input[type="password"]
 {
     padding: 1.5em;
+}
+
+input:focus {
+    outline-style: none;
+    box-shadow: none;
 }
   
 .status {
@@ -43,13 +48,20 @@ ul.password-requirements li:before {
 }
 
 .btn-custom {
-    background-color: #343a40; /* Dark grey color */
+    background-color: black;
     color: white;
     border: none;
 }
+
 .btn-custom:hover {
-    background-color: #23272b; /* Slightly darker grey on hover */
+    background-color: #333;
+    color: white;
 }
+
+.btn-custom:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+}
+
 .form-check-input-custom {
     background-color: #343a40; /* Dark grey color */
     border-color: #343a40;

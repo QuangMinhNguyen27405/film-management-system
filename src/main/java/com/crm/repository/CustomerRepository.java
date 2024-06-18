@@ -11,4 +11,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> { //<c
 
     @Query("from Customer c where c.email = ?1 and c.id <> ?2")
     Customer findByEmaiExcludeId(String email, Long customerId);
+
+    Customer findByEmail(String email);
 }

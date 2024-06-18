@@ -13,9 +13,4 @@ public class CustomerManagementApplication {
 		SpringApplication.run(CustomerManagementApplication.class, args);
 	}
 
-	@GetMapping("/api/v1")
-	public String hello(){
-		return "Hello World";
-	}
-
 }

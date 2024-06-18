@@ -17,11 +17,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin("*")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
-
 
     @GetMapping("/customer")
     public ResponseEntity<List<Customer>> fetchCustomers (HttpServletRequest request){
@@ -29,12 +29,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.fetchCustomer());
     }
 
-    @PostMapping("/customer")
+    @PostMapping("/customer/create")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){ //@Request Body: Lay file JSON
         System.out.println("CustomerController - createCustomer()");
         try {
             Customer createdCustomer = customerService.createCustomer(customer);
-            return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+            return ResponseEntity.ok(createdCustomer);
         } catch (Exception ex) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -60,6 +60,17 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RecordNotFoundException ex){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/customer/signin")
+    public ResponseEntity<Customer> signIn(@RequestParam String email, @RequestParam String password){
+        System.out.println("CustomerController - signInCustomer()");
+        try {
+            Customer customer = customerService.signIn(email, password);
+            return ResponseEntity.ok(customer);
+        } catch (RecordNotFoundException ex){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 }
