@@ -26,7 +26,7 @@ public class CustomerController {
     @GetMapping("/customer")
     public ResponseEntity<List<Customer>> fetchCustomers (HttpServletRequest request){
         System.out.println("CustomerController - fetchCustomer()");
-        return ResponseEntity.ok(customerService.fetchCustomer());
+        return ResponseEntity.ok(customerService.fetchCustomers());
     }
 
     @PostMapping("/customer/create")
@@ -60,17 +60,6 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RecordNotFoundException ex){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/customer/signin")
-    public ResponseEntity<Customer> signIn(@RequestParam String email, @RequestParam String password){
-        System.out.println("CustomerController - signInCustomer()");
-        try {
-            Customer customer = customerService.signIn(email, password);
-            return ResponseEntity.ok(customer);
-        } catch (RecordNotFoundException ex){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 }

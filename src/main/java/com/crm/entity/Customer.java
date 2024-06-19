@@ -1,5 +1,6 @@
 package com.crm.entity;
 
+import com.crm.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -124,5 +125,14 @@ public class Customer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Customer(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+        this.active = true;
+        this.createdDtm = DateUtils.getLocalDateTime();
     }
 }

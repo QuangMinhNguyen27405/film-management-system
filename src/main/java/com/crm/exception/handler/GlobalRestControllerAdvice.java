@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalRestControllerAdvice {
 
-    @Autowired
-    private DateUtils dateUtils;
-
     @ExceptionHandler(RecordNotFoundException.class)
     private ErrorResponse handleRecordNotFoundException(Exception ex){
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCreatedDTM(dateUtils.getLocalDateTime());
+        errorResponse.setCreatedDTM(DateUtils.getLocalDateTime());
         errorResponse.setErrorType(ErrorType.SERVICE_EXCEPTION);
         errorResponse.setErrorCode(HttpStatus.NO_CONTENT.value());
         errorResponse.setErrorMessage(ex.getMessage());
@@ -29,7 +26,7 @@ public class GlobalRestControllerAdvice {
     @ExceptionHandler(DuplicateEmailException.class)
     private ErrorResponse handleDuplicateEmailException(Exception ex){
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCreatedDTM(dateUtils.getLocalDateTime());
+        errorResponse.setCreatedDTM(DateUtils.getLocalDateTime());
         errorResponse.setErrorType(ErrorType.SERVICE_EXCEPTION);
         errorResponse.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.setErrorMessage(ex.getMessage());

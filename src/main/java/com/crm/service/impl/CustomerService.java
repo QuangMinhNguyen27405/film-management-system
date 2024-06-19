@@ -20,7 +20,7 @@ public class CustomerService {
     @Autowired
     private AddressRepository addressRepository;
 
-    public List<Customer> fetchCustomer(){
+    public List<Customer> fetchCustomers(){
         return customerRepository.findAll();
     }
 

@@ -15,7 +15,6 @@ public class HomeController {
         System.out.println("Session id = " + request.getRequestedSessionId());
 
         HttpSession session = request.getSession(true);
-
         LoginForm userLogin = (LoginForm) session.getAttribute("userSession");
 
         System.out.println("Hello = " + userLogin);

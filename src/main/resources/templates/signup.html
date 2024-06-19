@@ -14,17 +14,17 @@
 <body>
     <div class="container mt-5 pt-5 d-flex justify-content-center">
         <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-4 form-container">
-            <form id="registration" th:action="@{/signup}">
+            <form id="registration" th:action="@{/signup}" method="POST">
                 <h2 class="text-left">Create an Account</h2>
                 <div>
+                    <span class="status text-success float-left ml-1 my-1" id="first_name_status"></span>
                     <input type="text" id="firstName" class="form-control" name="firstName" required maxlength="50"
                             placeholder="First Name*">
-                    <span class="status text-success float-left ml-1 my-1" id="first_name_status"></span>
                 </div>
                 <div>
+                    <span class="status text-success float-left ml-1 my-1" id="last_name_status"></span>
                     <input type="text" id="lastName" class="form-control" name="lastName" required maxlength="50"
                             placeholder="Last Name*">
-                    <span class="status text-success float-left ml-1 my-1" id="last_name_status"></span>
                 </div>
 
                 <div>
@@ -67,108 +67,12 @@
                     <label class="form-check-label form-check-label-custom" for="agreement">I agree to the terms and conditions</label>
                 </div>
                 
-                <button type="submit" class="btn btn-custom btn-block">Create Account</button>
+                <button type="submit" id="buttonCreate" class="btn btn-custom btn-block">Create Account</button>
             </form>
         </div>
     </div>
     
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        
-        $("#email").keyup(function(){
-            var regx_email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}(\.[a-zA-Z]{2,6})?$/;
-
-            var email_inp = $(this).val();
-            if(regx_email.test(email_inp)) {
-                $("#email").removeClass("is-invalid");
-                $("#email").addClass("is-valid");
-                $("#email_status").removeClass("text-danger");
-                $("#email").removeClass("border-danger");
-                $("#email_status").text("Valid");
-            }
-            else {
-                $("#email").addClass("is-invalid");
-                $("#email_status").addClass("text-danger");
-                $("#email").addClass("border-danger");
-                $("#email_status").text("Please enter a valid email address.");
-            }
-        });
-
-        $("#password").keyup(function(){
-            var regx_password = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-            var password_inp = $(this).val();
-            if(regx_password.test(password_inp)) {
-                console.log("pass");
-                $("#password").removeClass("is-invalid");
-                $("#password").addClass("is-valid");
-                $("#password_status").removeClass("text-danger");
-                $("#password").removeClass("border-danger");
-                $("#password_status").text("Is Valid");
-            }
-            else {
-                $("#password").addClass("is-invalid");
-                $("#password_status").addClass("text-danger");
-                $("#password").addClass("border-danger");
-                $("#password_status").text("Please enter a valid password");
-            }
-        });
-
-        $("#retype_password").keyup(function(){
-
-            var password_inp = $("#password").val();
-            var retype_password_inp = $(this).val();
-
-            if(password_inp == retype_password_inp) {
-                $("#retype_password").removeClass("is-invalid");
-                $("#retype_password").addClass("is-valid");
-                $("#retype_password_status").removeClass("text-danger");
-                $("#retype_password").removeClass("border-danger");
-                $("#retype_password_status").text("Password Matched");
-            }
-            else {
-                $("#retype_password").addClass("is-invalid");
-                $("#retype_password").addClass("border-danger");
-                $("#retype_password_status").addClass("text-danger");
-                $("#retype_password_status").text("Password Must Match");
-            }
-        });
-
-        $("#registration").on("submit", function() {
-            event.preventDefault();
-            let firstName = $("#firstName").val();
-            let lastName = $("#lastName").val();
-            let email = $("#email").val();
-            let password = $("#password").val();
-            let address = $("#address").val();
-            let customer = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password,
-                active: true,
-                address: {
-                    address: address
-                }
-            };
-            console.log(customer);
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                type: 'POST',
-                url: 'http://localhost:8080/api/v1/customer',
-                data: JSON.stringify(customer),
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-
-            document.getElementById("registration").reset();
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/form.js}"></script>
 </html>

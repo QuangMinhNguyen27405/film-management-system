@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Component
 public class DateUtils {
 
-    public LocalDateTime getLocalDateTime(){
+    public static LocalDateTime getLocalDateTime(){
         return LocalDateTime.now();
     }
 }
