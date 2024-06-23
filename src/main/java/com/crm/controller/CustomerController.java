@@ -6,13 +6,11 @@ import com.crm.exception.custom.DuplicateEmailException;
 import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.service.impl.CustomerService;
 import com.crm.web.form.LoginForm;
-import com.crm.web.form.SignupAndUpdateForm;
 import com.crm.web.form.SignupForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,33 +21,30 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @CrossOrigin("*")
+@RequestMapping("customer")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
     @GetMapping("/signup")
-    public String signupForm(HttpServletRequest request, Model model){
-        model.addAttribute("signupForm", new SignupForm());
+    public String showSignupForm(HttpServletRequest request, Model model){
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String doSignup(@ModelAttribute SignupForm signupForm,
+    public String doSignup(@ModelAttribute @Valid SignupForm signupForm,
                            HttpServletRequest request, Model model, BindingResult result){
         System.out.println("CustomerController - doSignup()");
-        System.out.println(signupForm.getFirstName() + signupForm.getLastName() + signupForm.getEmail());
 
         try {
-            //duplicate SignupForm into Customer
-            Customer tempCustomer = new Customer(
-                    signupForm.getFirstName(),
-                    signupForm.getLastName(),
-                    signupForm.getEmail(),
-                    signupForm.getPassword());
-            Address address = new Address();
-            address.setAddress(signupForm.getAddress());
-            tempCustomer.setAddress(address);
+
+            Customer tempCustomer = new Customer();
+            tempCustomer.setFirstName(signupForm.getFirstName());
+            tempCustomer.setLastName(signupForm.getLastName());
+            tempCustomer.setEmail(signupForm.getEmail());
+            tempCustomer.setPassword(signupForm.getPassword());
+            tempCustomer.setAddress(new Address(signupForm.getAddress()));
 
             //Call Service Layer
             Customer customer = customerService.createCustomer(tempCustomer);
@@ -64,13 +59,15 @@ public class CustomerController {
     }
 
     @GetMapping("/login")
-    private String longinForm(HttpServletRequest request){
+    private String showLoginForm(HttpServletRequest request){
         return "login";
     }
 
     @PostMapping("/login")
     private String doLogin(@ModelAttribute @Valid LoginForm loginForm,
                            HttpServletRequest request, BindingResult result, Model model){
+
+        System.out.println("CustomerController - doLogin()");
 
         if(result.hasErrors()){
             model.addAttribute("error", "Invalid email or password.");
@@ -98,7 +95,7 @@ public class CustomerController {
     }
 
     @PutMapping("/profile/{customerId}")
-    public String doUpdate(@ModelAttribute @Valid SignupAndUpdateForm signupAndUpdateForm,
+    public String doUpdate(@ModelAttribute @Valid SignupForm signupForm,
                            @RequestParam Long customerId,
                            HttpServletRequest request,
                            BindingResult result, Model model){

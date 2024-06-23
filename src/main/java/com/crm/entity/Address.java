@@ -45,4 +45,11 @@ public class Address {
     public void setCustomer(List<Customer> customer) {
         this.customer = customer;
     }
+
+    public Address() {
+    }
+
+    public Address(String address) {
+        this.address = address;
+    }
 }

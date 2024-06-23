@@ -58,16 +58,4 @@ $(document).ready(function(){
             $("#retype_password_status").text("Password Must Match");
         }
     });
-
-    $("#buttonCreate").on("click", function(e){
-        e.preventDefault();
-        document.getElementById("registration").reset();
-        console.log("Prevent");
-        $(".form-control").removeClass("is-valid");
-        $(".status").text("");
-    })
-
-    $("buttonSignin").on("click", function(e){
-        e.preventDefault();
-    })
 });

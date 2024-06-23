@@ -1,15 +1,10 @@
 package com.crm.web.form;
 
 public class SignupForm {
-
     private String firstName;
-
     private String lastName;
-
     private String email;
-
     private String password;
-
     private String address;
 
     public String getFirstName() {
@@ -36,6 +31,14 @@ public class SignupForm {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -44,11 +47,17 @@ public class SignupForm {
         this.address = address;
     }
 
-    public String getPassword() {
-        return password;
+    public SignupForm() {
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String toString() {
+        return "SignupForm{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }
