@@ -1,6 +1,6 @@
 package com.crm.web.form;
 
-public class SignupForm {
+public class SignupAndUpdateForm {
 
     private String firstName;
 
@@ -36,6 +36,14 @@ public class SignupForm {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -44,11 +52,13 @@ public class SignupForm {
         this.address = address;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String toString() {
+        return "SignupForm{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

@@ -3,76 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
-        crossorigin="http://127.0.0.1:5500">
-    <link rel="stylesheet" 
-        th:href="@{css/styles.css}">
+    <title>Create Account</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          th:href="@{/css/styles.css}"
+          type="text/css">
 </head>
 <body>
-    <div class="container mt-5 pt-5 d-flex justify-content-center">
-        <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-4 form-container">
-            <form id="registration" th:action="@{/signup}" method="POST">
-                <h2 class="text-left">Create an Account</h2>
-                <div>
-                    <span class="status text-success float-left ml-1 my-1" id="first_name_status"></span>
-                    <input type="text" id="firstName" class="form-control" name="firstName" required maxlength="50"
-                            placeholder="First Name*">
-                </div>
-                <div>
-                    <span class="status text-success float-left ml-1 my-1" id="last_name_status"></span>
-                    <input type="text" id="lastName" class="form-control" name="lastName" required maxlength="50"
-                            placeholder="Last Name*">
-                </div>
-
-                <div>
-                    <span class="status text-success float-left ml-1 my-1" id="email_status"></span>
-                    <input type="email" id="email" class="form-control" name="email" required maxlength="50"
-                            placeholder="Email*">
-                </div>
-                
-                <div>
-                    <span class="status text-success float-left ml-1 my-1" id="password_status"></span>
-                    <input type="password" id="password" class="form-control" name="password" required maxlength="50"
-                            placeholder="Create a Password*">
-                </div>
-
-                <div class="my-2">
-                    <ul class="password-requirements list-unstyled small text-muted my-1 ml-2">
-                        <li><i class="fas fa-check-circle text-success"></i> The password must contain:</li>
-                        <li><i class="fas fa-check-circle text-success"></i> At least 1 uppercase letter</li>
-                        <li><i class="fas fa-check-circle text-success"></i> At least 1 lowercase letter</li>
-                        <li><i class="fas fa-check-circle text-success"></i> At least 1 special character</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Minimum 8 characters in length</li>
-                    </ul>
-                    
-                </div>
-
-                <div>
-                    <input type="password" id="retype_password" class="form-control" name="retypePassword" required maxlength="50"
-                            placeholder="Confirm Password*">
-                    <span class="status text-success float-left ml-2 py-1" id="retype_password_status"></span>
-                </div>
-
-                <div class="mb-4">
-                    <input type="text" id="address" class="form-control" name="address" required maxlength="50"
-                            placeholder="Address*">
-                    <span class="status text-success float-left ml-2 py-1" id="address_status"></span>
-                </div>
-
-                <div class="form-group form-check mt-3">
-                    <input type="checkbox" class="form-check-input form-check-input-custom" id="agreement" required>
-                    <label class="form-check-label form-check-label-custom" for="agreement">I agree to the terms and conditions</label>
-                </div>
-                
-                <button type="submit" id="buttonCreate" class="btn btn-custom btn-block">Create Account</button>
-            </form>
+<div class="container mt-5 pt-5 d-flex justify-content-center">
+    <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-4 form-container">
+        <div th:if="${param.error}">
+            Invalid username and password.
         </div>
+        <div th:if="${param.logout}">
+            You have been logged out.
+        </div>
+        <form id="registration" th:action="@{/signup}" th:object="${signupForm}" method="post">
+            <h2 class="text-left">Create an Account</h2>
+
+            <div>
+                <span class="status text-success float-left ml-1 my-1" id="first_name_status"></span>
+                <input type="text" th:field="*{firstName}" id="firstName" class="form-control" name="firstName" required maxlength="50"
+                       placeholder="First Name*">
+            </div>
+
+            <div>
+                <span class="status text-success float-left ml-1 my-1" id="last_name_status"></span>
+                <input type="text" th:field="*{lastName}" id="lastName" class="form-control" name="lastName" required maxlength="50"
+                       placeholder="Last Name*">
+            </div>
+
+            <div>
+                <span class="status text-success float-left ml-1 my-1" id="email_status"></span>
+                <input type="email" th:field="*{email}" id="email" class="form-control" name="email" required maxlength="50"
+                       placeholder="Email*">
+            </div>
+
+            <div>
+                <span class="status text-success float-left ml-1 my-1" id="password_status"></span>
+                <input type="password" th:field="*{password}" id="password" class="form-control" name="password" required maxlength="50"
+                       placeholder="Create a Password*">
+            </div>
+
+            <div class="my-2">
+                <ul class="password-requirements list-unstyled small text-muted my-1 ml-2">
+                    <li><i class="fas fa-check-circle text-success"></i> The password must contain:</li>
+                    <li><i class="fas fa-check-circle text-success"></i> At least 1 uppercase letter</li>
+                    <li><i class="fas fa-check-circle text-success"></i> At least 1 lowercase letter</li>
+                    <li><i class="fas fa-check-circle text-success"></i> At least 1 special character</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Minimum 8 characters in length</li>
+                </ul>
+
+            </div>
+
+            <div>
+                <input type="password" id="retype_password" class="form-control" name="retypePassword" required maxlength="50"
+                       placeholder="Confirm Password*">
+                <span class="status text-success float-left ml-2 py-1" id="retype_password_status"></span>
+            </div>
+
+            <div class="mb-4">
+                <input type="text" th:field="*{address}" id="address" class="form-control" name="address" required maxlength="50"
+                       placeholder="Address*">
+                <span class="status text-success float-left ml-2 py-1" id="address_status"></span>
+            </div>
+
+            <div class="form-group form-check mt-3">
+                <input type="checkbox" class="form-check-input form-check-input-custom" id="agreement" required>
+                <label class="form-check-label form-check-label-custom" for="agreement">I agree to the terms and conditions</label>
+            </div>
+
+            <button type="submit" id="buttonCreate" class="btn btn-custom btn-block">Create Account</button>
+        </form>
     </div>
-    
+</div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/form.js}"></script>
 </html>
+

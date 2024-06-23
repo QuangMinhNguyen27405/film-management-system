@@ -7,6 +7,9 @@ import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.AddressRepository;
 import com.crm.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -66,5 +69,10 @@ public class CustomerService {
             return customer;
         }
         return null;
+    }
+
+    public Page<Customer> findPaginated(int pageNo, int pageSize){
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.customerRepository.findAll(pageable);
     }
 }
