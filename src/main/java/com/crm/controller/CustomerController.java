@@ -39,11 +39,12 @@ public class CustomerController {
 
         try {
 
-            Customer tempCustomer = new Customer();
-            tempCustomer.setFirstName(signupForm.getFirstName());
-            tempCustomer.setLastName(signupForm.getLastName());
-            tempCustomer.setEmail(signupForm.getEmail());
-            tempCustomer.setPassword(signupForm.getPassword());
+            Customer tempCustomer = new Customer(
+                    signupForm.getFirstName(),
+                    signupForm.getLastName(),
+                    signupForm.getEmail(),
+                    signupForm.getPassword());
+
             tempCustomer.setAddress(new Address(signupForm.getAddress()));
 
             //Call Service Layer

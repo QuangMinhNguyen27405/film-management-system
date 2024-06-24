@@ -1,11 +1,20 @@
 package com.crm.web.form;
 
 public class SignupForm {
+    private Long customerId;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private String address;
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 
     public String getFirstName() {
         return firstName;

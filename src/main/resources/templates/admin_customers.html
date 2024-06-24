@@ -5,67 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/css/admin.css}"
+          type="text/css">
 </head>
 <body>
 
     <div class="container my-2">
-        
-        <h1>Customer's List</h1>
 
-        <table class="table table-striped table-responsive-md">
-            <thead class="thead-dark">
+        <h1 class="my-4">Customer's List</h1>
+
+        <div>
+            <button class="btn btn-success nBtn">New Customer</button>
+        </div>
+
+        <div class="table-responsive-md">
+            <table class="table table-striped">
+
+                <thead class="thead-dark">
                 <tr>
-                    <th>Customer Id</th>
+                    <th>Id</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Active</th>
+                    <th>Address</th>
                     <th>Actions</th>
                 </tr>
-            </thead>
-            <tbody>
-                <tr th:each="customer : ${customers}">
+                </thead>
+
+                <tbody>
+                <tr th:each="customer : ${customers}" class="py-3 my-3">
                     <td th:text="${customer.customerId}"></td>
                     <td th:text="${customer.firstName}"></td>
                     <td th:text="${customer.lastName}"></td>
                     <td th:text="${customer.email}"></td>
                     <td th:text="${customer.active}"></td>
+                    <td th:text="${customer.address.address}"></td>
                     <td>
-                        <a href="edit/url/here">Edit</a>
-                        <a href="delete/url/here">Delete</a>
+                        <a th:href="@{/admin/customers/findOne/{customerId}(customerId=${customer.customerId})}"
+                           class="btn btn-primary btn-sm eBtn">Edit</a>
+                        <a href="delete/url/here" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
 
-        <div th:if="${totalPages > 1}">
-            <div class="row col-sm-10">
-                <div class="col-sm-2">
-                    Total Rows: [[${totalItems}]]
-                </div>
-                <div class="col-sm-6">
+            </table>
+        </div>
+
+        <div th:if="${totalPages > 1}" class="pagination-container mt-3">
+            <div>
+                Total Customers: <span th:text="${totalItems}"></span>
+            </div>
+            <div class="pagination">
                     <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-                        <a th:if="${currentPage != i}" 
-                            th:href="@{'/admin/customer/page/' + ${i}}">[[${i}]]</a>
-                        <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                        <a th:if="${currentPage != i}" th:href="@{'/admin/customers/page/' + ${i}}" th:text="${i}"></a>
+                        <span th:unless="${currentPage != i}" th:text="${i}"></span>
                     </span>
-                </div>
-
-                <div class="col-sm-1">
-                    <a th:if="${currentPage < totalPages}" th:href="@{'/admin/customer/page/' + (${currentPage + 1})}">Next</a>
-                    <span th:unless="${currentPage < totalPages}">Next</span>
-                </div>
-
-                <div class="col-sm-1">
-                    <a th:if="${currentPage < totalPages}" th:href="@{'/admin/customer/page/' + ${totalPages}}">Last</a>
-                    <span th:unless="${currentPage < totalPages}">Last</span>
-                </div>
+            </div>
+            <div>
+                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/customers/page/' + ${(currentPage % totalPages) + 1}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+                <a th:if="${currentPage < totalPages}" th:href="@{'/admin/customers/page/' + ${totalPages}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
             </div>
         </div>
+
+    </div>
+
+    <div class="myForm">
+        <form th:action="@{/admin/customers/save}" method="post">
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="customerId" class="col-form-label">ID:</label>
+                                <input type="text" class="form-control" id="customerId" name="customerId" value="" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label for="firstName" class="col-form-label">First Name:</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" value="" />
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" class="col-form-label">Last Name:</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" value="" />
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-form-label">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" value="" />
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" value="" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label for="address" class="col-form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" value="" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Save" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
 </body>
 <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
 <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
-
+<script type="text/javascript" th:src="@{/js/admin.js}"></script>
+<script>
+</script>
 </html>

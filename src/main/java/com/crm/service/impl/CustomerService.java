@@ -27,12 +27,19 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Customer findCustomer(Long customerId) {
+        Optional<Customer> dbCustomer = customerRepository.findById(customerId);
+        if(dbCustomer.isEmpty()){
+            throw new RecordNotFoundException();
+        }
+        return dbCustomer.get();
+    }
+
     public Customer createCustomer(Customer customer){
         //find for duplicate address
         String address = customer.getAddress().getAddress();
         Optional<Address> dbAddress = addressRepository.findByAddress(address);
         dbAddress.ifPresent(customer::setAddress);
-
         return customerRepository.save(customer);
     }
 

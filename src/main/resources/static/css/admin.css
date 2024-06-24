@@ -1,18 +1,36 @@
-/* Custom CSS */
-table {
-    width: 100%;
-    margin: 20px 0;
-    border-collapse: collapse;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
 }
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+.table-responsive-md {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
 }
-th {
-    background-color: #f2f2f2;
-    color: #333;
+.thead-dark th {
+    background-color: #343a40;
+    color: #fff;
 }
-tr:hover {
-    background-color: #f1f1f1;
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+.pagination a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 5px;
+}
+.pagination span {
+    margin: 0 5px;
+    font-weight: bold;
+    color: #6c757d;
 }
