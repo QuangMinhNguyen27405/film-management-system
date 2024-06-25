@@ -61,5 +61,6 @@ public class Category {
     }
 
     public Category() {
+        this.lastUpdate = LocalDateTime.now();
     }
 }

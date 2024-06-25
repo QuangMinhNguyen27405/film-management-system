@@ -20,6 +20,7 @@ $(document).ready(function(){
                 $('.myForm #address').val(customer.address.address);
 
             });
+            console.log(href);
             $('.myForm #exampleModal').modal();
         }
         else{
@@ -33,5 +34,13 @@ $(document).ready(function(){
             $('.myForm #address').val('');
             $('.myForm #exampleModal').modal();
         }
+    });
+
+    $('.table .delBtn').on('click', function(event){
+        event.preventDefault();
+        var href = $(this).attr('href');
+        $('#staticBackdrop #delRef').attr('href', href);
+        $('#staticBackdrop').modal();
+        console.log(href);
     });
 })

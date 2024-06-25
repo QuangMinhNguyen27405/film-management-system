@@ -76,4 +76,8 @@ public class Rental {
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
+
+    public Rental() {
+        this.rentalDate = LocalDate.now();
+    }
 }

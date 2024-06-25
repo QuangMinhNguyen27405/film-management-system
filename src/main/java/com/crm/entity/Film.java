@@ -19,8 +19,9 @@ public class Film {
     @Column(name = "film_id")
     private Long filmId;
 
-    @Column(name = "language_id")
-    private Long languageId;
+    @ManyToOne
+    @JoinColumn(name = "language_id", referencedColumnName = "language_id")
+    private Language language;
 
     @Column(name = "title")
     private String title;
@@ -55,8 +56,8 @@ public class Film {
     @Column(name = "full_text")
     private String fullText;
 
-    @Column(name = "url")
-    private String img;
+    @Column(name = "picture_url")
+    private String pictureURL;
 
     @ManyToMany
     @JoinTable(
@@ -66,8 +67,16 @@ public class Film {
     )
     private Set<Category> categories = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "film_actor",
+            joinColumns = @JoinColumn(name = "film_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private Set<Actor> actors = new HashSet<>();
+
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
-    private Set<Inventory> inventories;
+    private Set<Inventory> inventories = new HashSet<>();
 
     public Long getFilmId() {
         return filmId;
@@ -77,12 +86,12 @@ public class Film {
         this.filmId = filmId;
     }
 
-    public Long getLanguageId() {
-        return languageId;
+    public Language getLanguage() {
+        return language;
     }
 
-    public void setLanguageId(Long languageId) {
-        this.languageId = languageId;
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public String getTitle() {
@@ -189,12 +198,20 @@ public class Film {
         this.categories = categories;
     }
 
-    public String getImg() {
-        return img;
+    public String getPictureURL() {
+        return pictureURL;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setPictureURL(String pictureURL) {
+        this.pictureURL = pictureURL;
+    }
+
+    public Set<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(Set<Actor> actors) {
+        this.actors = actors;
     }
 
     public Film() {
@@ -202,7 +219,7 @@ public class Film {
     }
 
     public Film(Film film) {
-        this.languageId = film.getLanguageId();
+        this.language = film.getLanguage();
         this.title = film.getTitle();
         this.description = film.getDescription();
         this.releaseYear = film.getReleaseYear();

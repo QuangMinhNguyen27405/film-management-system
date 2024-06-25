@@ -116,7 +116,7 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId){
         System.out.println("CustomerController - deleteCustomer()");
         try {
-            customerService.deleteCustomer(customerId);
+            customerService.deactivateCustomer(customerId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RecordNotFoundException ex){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

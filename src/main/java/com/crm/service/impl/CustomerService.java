@@ -61,13 +61,20 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public void deleteCustomer(Long customerId){
+    public void deactivateCustomer(Long customerId){
         //check if the customer existed in the database
         Optional<Customer> dbCustomer = customerRepository.findById(customerId);
         if(dbCustomer.isEmpty()){
             throw new RecordNotFoundException("Customer with id " + customerId + " does not exist");
         }
-        customerRepository.deleteById(customerId);
+        Customer customer = dbCustomer.get();
+        if(customer.isActive()){
+            customer.setActive(false);
+        }
+        else{
+            customer.setActive(true);
+        }
+        customerRepository.save(customer);
     }
 
     public Customer signIn(String email, String password){

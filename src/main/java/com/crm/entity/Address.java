@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "address")
@@ -20,7 +23,10 @@ public class Address {
 
     @JsonIgnore
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
-    private List<Customer> customer;
+    private Set<Customer> customer = new HashSet<>();
+
+    @Column(name = "last_update")
+    private LocalDateTime lastUpdate;
 
     public Long getId() {
         return id;
@@ -38,18 +44,28 @@ public class Address {
         this.address = address;
     }
 
-    public List<Customer> getCustomer() {
+    public Set<Customer> getCustomer() {
         return customer;
     }
 
-    public void setCustomer(List<Customer> customer) {
+    public void setCustomer(Set<Customer> customer) {
         this.customer = customer;
     }
 
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     public Address() {
+        this.lastUpdate = LocalDateTime.now();
     }
 
     public Address(String address) {
+        this.lastUpdate = LocalDateTime.now();
         this.address = address;
     }
 }

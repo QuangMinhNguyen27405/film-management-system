@@ -11,6 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}" type="text/css">
 </head>
 <body>
+<header id="header"></header>
 <div class="container mt-5 pt-5 d-flex justify-content-center">
     <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 p-4 form-container">
         <div th:if="${param.error}">
@@ -41,4 +42,5 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/form.js}"></script>
+<script type="text/javascript" th:src="@{/js/navbar.js}"></script>
 </html>

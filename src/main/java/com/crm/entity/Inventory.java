@@ -3,7 +3,10 @@ package com.crm.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "inventory")
@@ -18,10 +21,10 @@ public class Inventory {
     private Film film;
 
     @Column(name = "last_update")
-    private LocalDate lastUpdate;
+    private LocalDateTime lastUpdate;
 
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-    private List<Rental> rentals;
+    private Set<Rental> rentals = new HashSet<>();
 
     public Long getInventoryId() {
         return inventoryId;
@@ -39,19 +42,23 @@ public class Inventory {
         this.film = film;
     }
 
-    public LocalDate getLastUpdate() {
+    public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(LocalDate lastUpdate) {
+    public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
-    public List<Rental> getRentals() {
+    public Set<Rental> getRentals() {
         return rentals;
     }
 
-    public void setRentals(List<Rental> rentals) {
+    public void setRentals(Set<Rental> rentals) {
         this.rentals = rentals;
+    }
+
+    public Inventory() {
+        this.lastUpdate = LocalDateTime.now();
     }
 }

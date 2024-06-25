@@ -97,4 +97,15 @@ public class AdminController {
             return "redirect:/admin/customers/page/1";
         }
     }
+
+    @GetMapping("customers/deactivate/{customerId}")
+    public String deactivateCustomer(@PathVariable Long customerId){
+        System.out.println(("Admin Controller - deactivateCustomer()"));
+        try {
+            customerService.deactivateCustomer(customerId);
+            return "redirect:/admin/customers/page/1";
+        } catch(RecordNotFoundException ex) {
+            return "redirect:/admin/customers/page/1";
+        }
+    }
 }

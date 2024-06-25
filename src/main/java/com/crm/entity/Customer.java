@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -34,9 +36,8 @@ public class Customer {
     @Column(name = "active")
     private boolean active;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Rental> rentals;
+    private Set<Rental> rentals = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
@@ -49,19 +50,6 @@ public class Customer {
     public void setAddress(Address address) {
         this.address = address;
     }
-
-    public Customer() {
-        this.createdDtm = LocalDateTime.now();
-    }
-
-    public Customer(String firstName, String lastName, String email, boolean active) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.active = active;
-        this.createdDtm = LocalDateTime.now();
-    }
-
 
     public Long getCustomerId() {
         return customerId;
@@ -111,20 +99,24 @@ public class Customer {
         this.active = active;
     }
 
-    public List<Rental> getRentals() {
-        return rentals;
-    }
-
-    public void setRentals(List<Rental> rentals) {
-        this.rentals = rentals;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(Set<Rental> rentals) {
+        this.rentals = rentals;
+    }
+
+    public Customer() {
+        this.createdDtm = LocalDateTime.now();
     }
 
     public Customer(String firstName, String lastName, String email, String password) {

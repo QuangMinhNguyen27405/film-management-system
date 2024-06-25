@@ -3,7 +3,7 @@ package com.crm.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "admin")
+@Table(name = "admins")
 public class Admin {
 
     @Id
@@ -39,6 +39,9 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Admin() {
     }
 
     public Admin(String adminName, String password) {
