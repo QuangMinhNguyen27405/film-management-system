@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,22 +28,18 @@ public class AdminController {
     @Autowired
     CustomerService customerService;
 
-    @GetMapping("/login")
-    public String showAdminLogin(){
-        return "admin_login";
+    @GetMapping("csrf-token")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
     }
 
-    @PostMapping("/login")
-    public String doAdminLogin(@ModelAttribute @Valid LoginForm loginForm,
-                               HttpServletRequest request, BindingResult result, Model model){
-        return "admin_home";
-    }
-
+    // HOME CONTROLLER
     @GetMapping("/home")
     public String homePage(){
         return "admin_home";
     }
 
+    // CUSTOMER ADMINISTRATIONS
     @GetMapping("/customers/page")
     public String customersHomePage(Model model){
         return findPaginated(1, model);

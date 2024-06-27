@@ -2,11 +2,17 @@ package com.crm.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
-@Table(name = "language")
+@Table(name = "languages")
 public class Language {
 
     @Id
@@ -20,29 +26,6 @@ public class Language {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-    public Long getLanguageId() {
-        return languageId;
-    }
-
-    public void setLanguageId(Long languageId) {
-        this.languageId = languageId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 
     public Language() {
         this.lastUpdate = LocalDateTime.now();

@@ -2,13 +2,17 @@ package com.crm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "address")
 public class Address {
@@ -27,38 +31,6 @@ public class Address {
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Set<Customer> getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Set<Customer> customer) {
-        this.customer = customer;
-    }
-
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 
     public Address() {
         this.lastUpdate = LocalDateTime.now();
