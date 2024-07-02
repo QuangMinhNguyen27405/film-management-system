@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -22,7 +24,7 @@ public class Actor {
     private Long actorId;
 
     @ManyToMany(mappedBy = "actors")
-    private Set<Film> films = new HashSet<>();
+    private List<Film> films = new ArrayList<>();
 
     @Column(name = "first_name")
     private String firstName;
@@ -35,5 +37,10 @@ public class Actor {
 
     public Actor() {
         this.lastUpdate = LocalDateTime.now();
+    }
+
+    public Actor(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 }

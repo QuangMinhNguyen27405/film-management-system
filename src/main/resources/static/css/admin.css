@@ -12,6 +12,9 @@ body {
     background-color: #343a40;
     color: #fff;
 }
+.table td {
+    vertical-align: middle;
+}
 .btn-primary {
     background-color: #007bff;
     border: none;

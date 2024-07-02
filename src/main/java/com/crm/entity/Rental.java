@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -30,10 +31,10 @@ public class Rental {
     private LocalDate rentalDate;
 
     @Column(name = "return_date")
-    private LocalDate returnDate;
+    private LocalDateTime returnDate;
 
     @Column(name = "last_update")
-    private LocalDate lastUpdate;
+    private LocalDateTime lastUpdate;
 
     public Rental() {
         this.rentalDate = LocalDate.now();

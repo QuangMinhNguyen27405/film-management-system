@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="admin_fragments :: admin_html_head"></head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-4" th:text="${action}">Action</h2>
+    <form th:action="@{/admin/films/update}" method="post" th:object="${film}">
+        <!-- Film ID -->
+        <div class="form-group">
+            <label for="filmId" class="col-form-label">ID:</label>
+            <input type="text" class="form-control" id="filmId" name="filmId" th:value="${film.filmId}" readonly />
+        </div>
+        <!-- Film Title-->
+        <div class="form-group">
+            <label for="title" class="col-form-label">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" th:value="${film.title}" />
+        </div>
+        <!-- Film Release Year -->
+        <div class="form-group">
+            <label for="releaseYear" class="col-form-label">Release Year:</label>
+            <input type="text" class="form-control" id="releaseYear" name="releaseYear" th:value="${film.releaseYear}" />
+        </div>
+        <!-- Film Category -->
+        <div class="form-group">
+            <label class="col-form-label">Category:</label>
+            <div th:each="category : ${allCategories}">
+                <input type="checkbox" class="mx-2"
+                       name="categories"
+                       th:value="${category.categoryId}"
+                       th:text="${category.name}"
+                       th:checked="${film.categories.contains(category)}"/>
+            </div>
+        </div>
+        <!-- Film Rental Rate -->
+        <div class="form-group">
+            <label for="rentalRate" class="col-form-label">Rental Rate</label>
+            <input type="text" class="form-control" id="rentalRate" name="rentalRate" th:value="${film.rentalRate}" />
+        </div>
+        <!-- Film Description -->
+        <div class="form-group">
+            <label for="description" class="col-form-label">Description</label>
+            <input type="text" class="form-control" id="description" name="description" th:value="${film.description}" />
+        </div>
+        <!-- Film Language -->
+        <div class="form-group">
+            <label for="language" class="col-form-label">Language</label>
+            <select id="language" name="language">
+                <option th:each="language : ${allLanguages}"
+                        th:value="${language.languageId}"
+                        th:text="${language.name}"
+                        th:selected="${language.languageId == film.language.languageId}">
+                </option>
+            </select>
+        </div>
+        <!-- Film Actors -->
+        <div class="form-group" id="film_actor">
+            <label class="col-form-label">Main Actors</label>
+            <div id="actorsContainer" th:each="actor : ${film.actors}">
+                <input type="text" class="form-control mb-2" name="actors" th:value="${actor.firstName + ' ' + actor.lastName}" />
+            </div>
+            <button type="button" id="addActorBtn" class="btn btn-secondary mt-2">Add Actor</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/admin/films/page}" class="btn btn-danger">Cancel</a>
+    </form>
+</div>
+
+</html>

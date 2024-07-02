@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css}">
-    <link rel="stylesheet"
-          th:href="@{/css/admin.css}"
-          type="text/css">
-</head>
+<head th:replace="admin_fragments :: admin_html_head"></head>
 <body>
 
-    <div class="container my-2">
+    <div class="container-fluid ">
 
-        <h1 class="my-4">Customer's List</h1>
+        <header th:replace="admin_fragments :: html_header" />
+
+        <h1 class="my-4">Customer List</h1>
 
         <div>
-            <button class="btn btn-success nBtn">New Customer</button>
+            <a class="btn btn-success" th:href="@{/admin/customers/new}">New Customer</a>
         </div>
 
         <div class="table-responsive-md">
@@ -30,21 +24,27 @@
                     <th>Email</th>
                     <th>Active</th>
                     <th>Address</th>
+                    <th>Role(s)</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
 
                 <tbody>
-                <tr th:each="customer : ${customers}" class="py-3 my-3"
+                <tr th:each="customer : ${customers}" class="my-3"
                     th:classappend="${!customer.active} ? 'fainted' : ''">
                     <td th:text="${customer.customerId}"></td>
                     <td th:text="${customer.firstName}"></td>
                     <td th:text="${customer.lastName}"></td>
                     <td th:text="${customer.email}"></td>
                     <td th:text="${customer.active}"></td>
-                    <td th:text="${customer.address.address}"></td>
+                    <td th:text="${customer?.address?.address}"></td>
                     <td>
-                        <a th:href="@{/admin/customers/findOne/{customerId}(customerId=${customer.customerId})}"
+                        <div th:each="role : ${customer.roles}">
+                            <span th:text="${role.name}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <a th:href="@{/admin/customers/update/{customerId}(customerId=${customer.customerId})}"
                            class="btn btn-primary btn-sm eBtn">Edit</a>
                         <a th:href="@{/admin/customers/deactivate/{customerId}(customerId=${customer.customerId})}"
                            class="btn btn-danger btn-sm delBtn"
@@ -53,103 +53,31 @@
                     </td>
                 </tr>
                 </tbody>
-
             </table>
         </div>
 
         <div th:if="${totalPages > 1}" class="pagination-container mt-3">
+
             <div>
                 Total Customers: <span th:text="${totalItems}"></span>
             </div>
+
             <div class="pagination">
-                <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:if="${currentPage != i}" th:href="@{'/admin/customers/page/' + ${i}}" th:text="${i}"></a>
-                    <span th:unless="${currentPage != i}" th:text="${i}"></span>
-                </span>
+                        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a th:if="${currentPage != i}" th:href="@{'/admin/customers/page/' + ${i}}" th:text="${i}"></a>
+                            <span th:unless="${currentPage != i}" th:text="${i}"></span>
+                        </span>
             </div>
+
             <div>
                 <a th:if="${currentPage < totalPages}" th:href="@{'/admin/customers/page/' + ${(currentPage % totalPages) + 1}}">Next</a>
                 <span th:unless="${currentPage < totalPages}">Next</span>
                 <a th:if="${currentPage < totalPages}" th:href="@{'/admin/customers/page/' + ${totalPages}}">Last</a>
                 <span th:unless="${currentPage < totalPages}">Last</span>
             </div>
+
         </div>
 
     </div>
-
-    <div class="myForm">
-        <form th:action="@{/admin/customers/save}" method="post">
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Update</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="customerId" class="col-form-label">ID:</label>
-                                <input type="text" class="form-control" id="customerId" name="customerId" value="" readonly />
-                            </div>
-                            <div class="form-group">
-                                <label for="firstName" class="col-form-label">First Name:</label>
-                                <input type="text" class="form-control" id="firstName" name="firstName" value="" />
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName" class="col-form-label">Last Name:</label>
-                                <input type="text" class="form-control" id="lastName" name="lastName" value="" />
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="col-form-label">Email:</label>
-                                <input type="email" class="form-control" id="email" name="email" value="" />
-                            </div>
-                            <div class="form-group">
-                                <label for="password" class="col-form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" value="" readonly />
-                            </div>
-                            <div class="form-group">
-                                <label for="address" class="col-form-label">Address</label>
-                                <input type="text" class="form-control" id="address" name="address" value="" />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <input type="submit" class="btn btn-primary" value="Save" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <p class="alert alert-danger">
-                    Are you sure you want to activate/deactivate this customer?
-                </p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <a href="" class="btn btn-danger" id="delRef" method="post">Yes</a>
-            </div>
-          </div>
-        </div>
-    </div>
-
 </body>
-<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/admin.js}"></script>
-<script>
-</script>
 </html>

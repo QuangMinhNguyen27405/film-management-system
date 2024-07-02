@@ -1,13 +1,16 @@
 package com.crm.entity;
 
 import com.crm.utils.DateUtils;
+import com.crm.web.form.SignupForm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -37,7 +40,7 @@ public class Customer {
     @Column(name = "email", unique = true, length = 50)
     private String email;
 
-    @Column(name = "active")
+    @Column(name = "active", columnDefinition = "boolean default true")
     private boolean active;
 
     @ManyToMany
@@ -45,10 +48,10 @@ public class Customer {
             name="customers_roles",
             joinColumns={@JoinColumn(name="customer_id", referencedColumnName="customer_id")},
             inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="role_id")})
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Rental> rentals = new HashSet<>();
+    private List<Rental> rentals = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
@@ -58,12 +61,13 @@ public class Customer {
         this.createdDtm = LocalDateTime.now();
     }
 
-    public Customer(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.email = email;
+    public Customer(SignupForm signupForm) {
+        this.firstName = signupForm.getFirstName();
+        this.lastName = signupForm.getLastName();
+        this.password = signupForm.getPassword();
+        this.email = signupForm.getEmail();
         this.active = true;
         this.createdDtm = DateUtils.getLocalDateTime();
+        this.address = new Address(signupForm.getAddress());
     }
 }

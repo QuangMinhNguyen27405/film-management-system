@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -27,7 +29,7 @@ public class Address {
 
     @JsonIgnore
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
-    private Set<Customer> customer = new HashSet<>();
+    private List<Customer> customer = new ArrayList<>();
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;

@@ -36,25 +36,25 @@ public class CustomerService {
     }
 
     public Customer createCustomer(Customer customer){
-        //find for duplicate address
+        //find for existing address
         String address = customer.getAddress().getAddress();
         Optional<Address> dbAddress = addressRepository.findByAddress(address);
         dbAddress.ifPresent(customer::setAddress);
         return customerRepository.save(customer);
     }
 
-    public Customer updateCustomer(Long customerId, Customer customer){
+    public Customer updateCustomer(Customer customer){
         //check if the customer existed in the database
-        Optional<Customer> dbCustomer = customerRepository.findById(customerId);
+        Optional<Customer> dbCustomer = customerRepository.findById(customer.getCustomerId());
         if(dbCustomer.isEmpty()){
-            throw new RecordNotFoundException("Customer with id " + customerId + " does not exist");
+            throw new RecordNotFoundException("Customer with id " + customer.getCustomerId() + " does not exist");
         }
         //find for duplicate address
         String address = customer.getAddress().getAddress();
         Optional<Address> dbAddress = addressRepository.findByAddress(address);
         dbAddress.ifPresent(customer::setAddress);
         //check if the changed email matches with any other email
-        Customer existedEmail = customerRepository.findByEmaiExcludeId(customer.getEmail(), customerId);
+        Customer existedEmail = customerRepository.findByEmaiExcludeId(customer.getEmail(), customer.getCustomerId());
         if(existedEmail != null){
             throw new DuplicateEmailException("Email " + customer.getEmail() + " existed");
         }

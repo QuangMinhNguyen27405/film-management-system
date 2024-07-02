@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @CrossOrigin("*")
-@RequestMapping("customer")
+@RequestMapping("/customer")
 public class CustomerController {
 
     @Autowired
@@ -33,23 +33,14 @@ public class CustomerController {
     }
 
     @PostMapping("/signup")
-    public String doSignup(@ModelAttribute @Valid SignupForm signupForm,
+    public String doSignup(@ModelAttribute @Valid Customer customer,
                            HttpServletRequest request, Model model, BindingResult result){
         System.out.println("CustomerController - doSignup()");
 
         try {
-
-            Customer tempCustomer = new Customer(
-                    signupForm.getFirstName(),
-                    signupForm.getLastName(),
-                    signupForm.getEmail(),
-                    signupForm.getPassword());
-
-            tempCustomer.setAddress(new Address(signupForm.getAddress()));
-
             //Call Service Layer
-            Customer customer = customerService.createCustomer(tempCustomer);
-            if (customer != null) {
+            Customer newCustomer = customerService.createCustomer(customer);
+            if (newCustomer != null) {
                 System.out.println("Sign Up Successfully");
             }
             return "login";
@@ -60,50 +51,52 @@ public class CustomerController {
     }
 
     @GetMapping("/login")
-    private String showLoginForm(HttpServletRequest request){
+    private String showLoginForm(HttpServletRequest request, Model model){
+        model.addAttribute("pageTitle", "Log In");
         return "login";
     }
 
-    @PostMapping("/login")
-    private String doLogin(@ModelAttribute @Valid LoginForm loginForm,
-                           HttpServletRequest request, BindingResult result, Model model){
-
-        System.out.println("CustomerController - doLogin()");
-
-        if(result.hasErrors()){
-            model.addAttribute("error", "Invalid email or password.");
-            return "login";
-        }
-
-        Customer customer = customerService.signIn(loginForm.getEmail(), loginForm.getPassword());
-        if(customer != null){
-            System.out.println("Login Successfully");
-            HttpSession session = request.getSession(true);
-            session.setAttribute("userSession", loginForm);
-
-            System.out.println("Redirect to home page");
-            return "redirect:/home";
-        }
-        else{
-            model.addAttribute("error", "Invalid email or password.");
-            return "login";
-        }
-    }
+//    @PostMapping("/login")
+//    private String doLogin(@ModelAttribute @Valid LoginForm loginForm,
+//                           BindingResult result, HttpServletRequest request, Model model){
+//
+//        System.out.println("CustomerController - doLogin()");
+//
+//        if(result.hasErrors()){
+//            model.addAttribute("error", "Invalid email or password.");
+//            return "login";
+//        }
+//
+//        Customer customer = customerService.signIn(loginForm.getEmail(), loginForm.getPassword());
+//        if(customer != null){
+//            System.out.println("Login Successfully");
+//
+//            HttpSession session = request.getSession(true);
+//            session.setAttribute("userSession", loginForm);
+//
+//            System.out.println("Redirect to home page");
+//            return "redirect:/home";
+//        }
+//        else{
+//            model.addAttribute("error", "Invalid email or password.");
+//            return "login";
+//        }
+//    }
 
     @GetMapping("/profile/{customerId}")
     private String updateForm(@RequestParam Long customerId){
         return "profile/" + customerId;
     }
 
-    @PutMapping("/profile/{customerId}")
-    public String doUpdate(@ModelAttribute @Valid SignupForm signupForm,
+    @PostMapping("/profile/update")
+    public String doUpdate(@ModelAttribute @Valid Customer customer,
                            @RequestParam Long customerId,
                            HttpServletRequest request,
                            BindingResult result, Model model){
 
         System.out.println("CustomerController - updateCustomer()");
         try {
-
+            customerService.updateCustomer(customer);
             return "profile/" + customerId;
         } catch (RecordNotFoundException ex){
             return "profile/" + customerId;

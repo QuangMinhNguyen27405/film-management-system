@@ -1,16 +1,17 @@
 package com.crm.controller;
 
-import com.crm.entity.Address;
-import com.crm.entity.Customer;
+import com.crm.entity.*;
 import com.crm.exception.custom.DuplicateEmailException;
 import com.crm.exception.custom.RecordNotFoundException;
+import com.crm.repository.CategoryRepository;
+import com.crm.repository.LanguageRepository;
+import com.crm.repository.RoleRepository;
+import com.crm.service.impl.CategoryService;
 import com.crm.service.impl.CustomerService;
-import com.crm.web.form.LoginForm;
-import com.crm.web.form.SignupForm;
+import com.crm.service.impl.FilmService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -28,25 +29,37 @@ public class AdminController {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    private FilmService filmService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private LanguageRepository languageRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     @GetMapping("csrf-token")
     public CsrfToken getCsrfToken(HttpServletRequest request) {
         return (CsrfToken) request.getAttribute("_csrf");
     }
 
-    // HOME CONTROLLER
-    @GetMapping("/home")
-    public String homePage(){
-        return "admin_home";
-    }
-
     // CUSTOMER ADMINISTRATIONS
+
+    // Customers pagination default page 1
     @GetMapping("/customers/page")
     public String customersHomePage(Model model){
-        return findPaginated(1, model);
+        return findPaginatedCustomer(1, model);
     }
 
+    // Customers pagination display
     @GetMapping("/customers/page/{pageNo}")
-    public String findPaginated(@PathVariable (value = "pageNo") int pageNo,Model model){
+    public String findPaginatedCustomer(@PathVariable (value = "pageNo") int pageNo, Model model){
 
         int pageSize = 8;
 
@@ -61,9 +74,10 @@ public class AdminController {
         return "admin_customers";
     }
 
-    @GetMapping("customers/findOne/{customerId}")
+    // Find customer
+    @GetMapping("customers/findCustomer/{customerId}")
     @ResponseBody
-    public Customer findOne(@PathVariable Long customerId){
+    public Customer findCustomer(@PathVariable Long customerId){
         System.out.println("AdminController - findOne()");
         try {
             return customerService.findCustomer(customerId);
@@ -72,21 +86,22 @@ public class AdminController {
         }
     }
 
-    @PostMapping("customers/save")
-    public String updateCustomer(@ModelAttribute @Valid SignupForm signupForm, Model model){
+    @GetMapping("/customers/new")
+    public String showCreateCustomer(Model model){
+
+        List<Role> roles = roleRepository.findAll();
+
+        model.addAttribute("allRoles", roles);
+
+        return "admin_customer_add";
+    }
+
+    // Update or save customer
+    @PostMapping("/customers/new")
+    public String doCreateCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model){
         System.out.println(("Admin Controller - saveCustomer()"));
         try {
-
-            Customer customer = new Customer(signupForm.getFirstName(), signupForm.getLastName(), signupForm.getEmail(), signupForm.getPassword());
-            customer.setAddress(new Address(signupForm.getAddress()));
-            customer.setCustomerId(signupForm.getCustomerId());
-
-            if(customer.getCustomerId() == null){
-                customerService.createCustomer(customer);
-            }
-            else{
-                customerService.updateCustomer(customer.getCustomerId(), customer);
-            }
+            customerService.createCustomer(customer);
             return "redirect:/admin/customers/page/1";
         } catch (DuplicateEmailException ex){
             return "redirect:/admin/customers/page/1";
@@ -95,6 +110,32 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/customers/update/{customerId}")
+    public String showUpdateCustomer(@PathVariable Long customerId, Model model){
+
+        List<Role> roles = roleRepository.findAll();
+        Customer customer = customerService.findCustomer(customerId);
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("allRoles", roles);
+
+        return "admin_customer_edit";
+    }
+
+    @PostMapping("/customers/update")
+    public String doUpdateCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model){
+        System.out.println(("Admin Controller - saveCustomer()"));
+        try {
+            customerService.updateCustomer(customer);
+            return "redirect:/admin/customers/page/1";
+        } catch (DuplicateEmailException ex){
+            return "redirect:/admin/customers/page/1";
+        } catch (RecordNotFoundException ex){
+            return "redirect:/admin/customers/page/1";
+        }
+    }
+
+    // Deactivate Status Of Customer
     @GetMapping("customers/deactivate/{customerId}")
     public String deactivateCustomer(@PathVariable Long customerId){
         System.out.println(("Admin Controller - deactivateCustomer()"));
@@ -105,4 +146,95 @@ public class AdminController {
             return "redirect:/admin/customers/page/1";
         }
     }
+
+    // FILM ADMINISTRATIONS
+
+    // Films pagination default page 1
+    @GetMapping("/films/page")
+    public String filmsHomePage(Model model){
+        return findPaginatedFilm(1, model);
+    }
+
+    // Films pagination display
+    @PostMapping("film/page/{pageNo}")
+    public String findPaginatedFilm(@PathVariable (value = "pageNo") int pageNo, Model model){
+
+        int pageSize = 8;
+
+        Page<Film> page = filmService.findPaginated(pageNo, pageSize);
+        List<Film> filmList = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("films", filmList);
+
+        return "admin_films";
+    }
+
+    // Find Film
+    @GetMapping("films/findFilm/{filmId}")
+    public Film findFilm(@PathVariable Long filmId){
+        System.out.println("FilmControl - findFilm()");
+        try{
+            return filmService.findFilm(filmId);
+        } catch (RecordNotFoundException ex){
+            return null;
+        }
+    }
+
+    // Add new film
+    @GetMapping("/films/new")
+    public String showCreateFilm(Model model){
+
+        List<Category> categories = categoryRepository.findAll();
+        List<Language> languages = languageRepository.findAll();
+
+        model.addAttribute("allCategories", categories);
+        model.addAttribute("allLanguages", languages);
+
+        return "admin_film_add";
+    }
+
+    @PostMapping("/films/new")
+    public String doCreateFilm(@ModelAttribute @Valid Film film,
+                              Model model, BindingResult result){
+
+        System.out.println("FilmControl - doCreateFilm()");
+        try {
+            filmService.createFilm(film);
+            return "redirect:/admin/films/page";
+        } catch (Exception ex){
+            return "redirect:/admin/films/page";
+        }
+    }
+
+    // Update film
+    @GetMapping("/films/update/{filmId}")
+    private String showUpdateFilm(@PathVariable Long filmId, Model model){
+
+        Film film = filmService.findFilm(filmId);
+        List<Category> categories = categoryRepository.findAll();
+        List<Language> languages = languageRepository.findAll();
+
+        model.addAttribute("allCategories", categories);
+        model.addAttribute("allLanguages", languages);
+        model.addAttribute("film", film);
+
+        return "admin_film_edit";
+    }
+
+    @PostMapping("/films/update")
+    public String doUpdateFilm(@ModelAttribute @Valid Film film,
+                              Model model, BindingResult result){
+
+        System.out.println("FilmControl - doUpdateFilm()");
+        try {
+            filmService.updateFilm(film);
+            return "redirect:/admin/films/page";
+        } catch (Exception ex){
+            return "redirect:/admin/films/page";
+        }
+    }
+
 }

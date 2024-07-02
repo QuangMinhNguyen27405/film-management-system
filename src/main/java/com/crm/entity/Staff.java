@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -28,7 +29,7 @@ public class Staff {
     private Store store;
 
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
-    private List<Payment> payments;
+    private List<Payment> payments = new ArrayList<>();
 
     @Column(name = "firstName")
     private String firstName;

@@ -26,8 +26,11 @@ public class Language {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-
     public Language() {
         this.lastUpdate = LocalDateTime.now();
+    }
+
+    public Language(String name){
+        this.name = name;
     }
 }

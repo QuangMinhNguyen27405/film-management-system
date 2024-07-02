@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,13 +38,13 @@ public class Film {
     private Long rentalDuration;
 
     @Column(name = "rental_rate")
-    private BigInteger rentalRate;
+    private BigDecimal rentalRate;
 
     @Column(name = "length")
     private Integer length;
 
     @Column(name = "replacement_cost")
-    private BigInteger replacementCost;
+    private BigDecimal replacementCost;
 
     @Column(name = "rating")
     private Long rating;
@@ -61,13 +61,13 @@ public class Film {
     @Column(name = "picture_url")
     private String pictureURL;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "film_category",
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories = new HashSet<>();
+    private List<Category> categories;
 
     @ManyToMany
     @JoinTable(
@@ -75,25 +75,12 @@ public class Film {
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-    private Set<Actor> actors = new HashSet<>();
+    private List<Actor> actors;
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
-    private Set<Inventory> inventories = new HashSet<>();
+    private List<Inventory> inventories = new ArrayList<>();
 
     public Film() {
-        this.lastUpdate = LocalDateTime.now();
-    }
-
-    public Film(Film film) {
-        this.language = film.getLanguage();
-        this.title = film.getTitle();
-        this.description = film.getDescription();
-        this.releaseYear = film.getReleaseYear();
-        this.rentalDuration = film.getRentalDuration();
-        this.length = film.getLength();
-        this.rating = film.getRating();
-        this.specialFeatures = film.getSpecialFeatures();
-        this.fullText = film.getFullText();
         this.lastUpdate = LocalDateTime.now();
     }
 }
