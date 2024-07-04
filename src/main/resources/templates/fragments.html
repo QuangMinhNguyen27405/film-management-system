@@ -35,6 +35,7 @@
     <script th:src="@{/js/jquery-1.11.1.min.js}"></script>
     <script th:src="@{/js/plugins.js}"></script>
     <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/form.js}"></script>
 
     <!--[if lt IE 9]>
     <script th:src="@{js/ie-support/html5.js}"></script>
@@ -60,18 +61,22 @@
                 <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 
                 <ul class="menu">
-                    <li class="menu-item"><a href="/home">Home</a></li>
-                    <li class="menu-item"><a href="about.html">About</a></li>
-                    <li class="menu-item"><a href="review.html">Movie Rental</a></li>
-                    <li class="menu-item"><a href="joinus.html">Join us</a></li>
+                    <li class="menu-item"><a th:href="@{/home}">Home</a></li>
+                    <li class="menu-item"><a th:href="@{/about}">About</a></li>
+                    <li class="menu-item"><a href="@{/rental}">Movie Rental</a></li>
+                    <li class="menu-item"><a href="@{/joinus}">Join us</a></li>
                     <li class="menu-item dropdown">
                         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
                             Account
                         </a>
 
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/customer/login">Sign In</a>
-                            <a class="dropdown-item" href="/customer/signup">Create Account</a>
+                        <div class="dropdown-menu" th:if="${!login}">
+                            <a class="dropdown-item" th:href="@{/login}">Sign In</a>
+                            <a class="dropdown-item" th:href="@{/signup}">Create Account</a>
+                        </div>
+                        <div class="dropdown-menu" th:if="${login}">
+                            <a class="dropdown-item" th:href="@{/customer/profile/{customerId}(customerId=${customerId})}">User Profile</a>
+                            <a class="dropdown-item" th:href="@{/logout}">Log Out</a>
                         </div>
                     </li>
 

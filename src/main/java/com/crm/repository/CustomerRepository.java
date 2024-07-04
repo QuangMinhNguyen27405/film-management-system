@@ -13,6 +13,4 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> { //<c
     Customer findByEmaiExcludeId(String email, Long customerId);
 
     Customer findByEmail(String email);
-
-
 }

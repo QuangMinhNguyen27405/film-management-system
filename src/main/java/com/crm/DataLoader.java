@@ -2,6 +2,7 @@ package com.crm;
 
 import com.crm.entity.*;
 import com.crm.repository.*;
+import com.crm.service.impl.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -130,10 +134,10 @@ public class DataLoader implements CommandLineRunner {
             admin.setFirstName("admin");
             admin.setLastName("controll");
             admin.setEmail("admin@email.com");
-            admin.setPassword("admin");
+            admin.setPassword("Steve@123");
             admin.setRoles(roles);
 
-            customerRepository.save(admin);
+            customerService.createCustomer(admin);
         }
     }
 }

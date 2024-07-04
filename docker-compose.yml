@@ -1,0 +1,37 @@
+# Docker Compose file for defining services and their dependencies.
+
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - s-network
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db-data:/var/lib/mysql/data
+    expose:
+      - "3306"
+    networks:
+      - s-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  s-network:
+    driver: bridge
+
+volumes:
+  db-data:

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="fragments :: html_head">
+<head th:replace="~{fragments :: html_head}">
 </head>
 
 <body>
@@ -131,7 +131,7 @@
 			</div> <!-- .container -->
 		</main>
 
-		<footer th:replace="fragments :: html_footer"/>
+		<footer th:replace="~{fragments :: html_footer}"/>
 	</div>
 	<!-- Default snippet for navigation -->
 </body>

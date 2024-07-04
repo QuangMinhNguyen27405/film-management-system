@@ -1,7 +1,6 @@
 package com.crm.entity;
 
 import com.crm.utils.DateUtils;
-import com.crm.web.form.SignupForm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -59,15 +56,5 @@ public class Customer {
 
     public Customer() {
         this.createdDtm = LocalDateTime.now();
-    }
-
-    public Customer(SignupForm signupForm) {
-        this.firstName = signupForm.getFirstName();
-        this.lastName = signupForm.getLastName();
-        this.password = signupForm.getPassword();
-        this.email = signupForm.getEmail();
-        this.active = true;
-        this.createdDtm = DateUtils.getLocalDateTime();
-        this.address = new Address(signupForm.getAddress());
     }
 }

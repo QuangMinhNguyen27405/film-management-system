@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="fragments :: html_head">
+<head th:replace="~{fragments :: html_head}">
 <body>
     <div id="site-content">
-        <header th:replace="fragments :: html_header"></header>
+        <header th:replace="~{fragments :: html_header}"></header>
 
         <main class="main-content container py-5 mb-5 d-flex justify-content-center bg-white rounded">
             <div class = "col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 px-auto form-container">
@@ -13,7 +13,7 @@
                 <div th:if="${param.logout}">
                     You have been logged out.
                 </div>
-                <form th:action="@{/customer/signup}" method="post" id="registration">
+                <form th:action="@{/signup}" method="post" id="registration">
                     <h2 class="text-left">Create an Account</h2>
                 
                     <div>
@@ -68,7 +68,7 @@
             </div>
         </main>
 
-        <footer th:replace="fragments :: html_footer"/>
+        <footer th:replace="~{fragments :: html_footer}"/>
     </div>
 
 </body>

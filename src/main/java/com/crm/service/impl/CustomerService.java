@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class CustomerService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Customer> fetchCustomers(){
         return customerRepository.findAll();
@@ -37,9 +41,14 @@ public class CustomerService {
 
     public Customer createCustomer(Customer customer){
         //find for existing address
-        String address = customer.getAddress().getAddress();
-        Optional<Address> dbAddress = addressRepository.findByAddress(address);
-        dbAddress.ifPresent(customer::setAddress);
+        if(customer.getAddress() != null) {
+            String address = customer.getAddress().getAddress();
+            Optional<Address> dbAddress = addressRepository.findByAddress(address);
+            dbAddress.ifPresent(customer::setAddress);
+        }
+        //encode user password
+        String encodedPassword = passwordEncoder.encode(customer.getPassword());
+        customer.setPassword(encodedPassword);
         return customerRepository.save(customer);
     }
 
