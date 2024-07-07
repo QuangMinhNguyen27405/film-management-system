@@ -1,7 +1,6 @@
 /* form.css */
-form h2 {
+form h1 {
     margin-bottom: 20 px;
-    font-size: 24 px;
 }
 
 label {
@@ -55,7 +54,7 @@ ul.password-requirements li:before {
 }
 
 .form-check-input-custom {
-    background-color: #343a40; /* Dark grey color */
+    background-color: #343a40;
     border-color: #343a40;
 }
 .form-check-input-custom:checked {

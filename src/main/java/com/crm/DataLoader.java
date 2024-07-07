@@ -3,6 +3,7 @@ package com.crm;
 import com.crm.entity.*;
 import com.crm.repository.*;
 import com.crm.service.impl.CustomerService;
+import com.crm.service.impl.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,12 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private FilmService filmService;
+
+    @Autowired
+    private FilmRepository filmRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -138,6 +145,12 @@ public class DataLoader implements CommandLineRunner {
             admin.setRoles(roles);
 
             customerService.createCustomer(admin);
+        }
+    }
+
+    public void loadFilms() {
+        if(filmRepository.count() == 0){
+
         }
     }
 }

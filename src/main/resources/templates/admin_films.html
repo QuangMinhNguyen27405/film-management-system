@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="admin_fragments :: admin_html_head"></head>
+<head th:replace="~{admin_fragments :: admin_html_head}"></head>
 <body>
 
 <div class="container-fluid my-2">
 
-    <header th:replace="admin_fragments :: html_header" />
+    <header th:replace="~{admin_fragments :: html_header}" />
 
     <h1 class="my-4">Film List</h1>
 
@@ -26,6 +26,7 @@
                 <th>Description</th>
                 <th>Language</th>
                 <th>Main Actors</th>
+                <th>Picture URL</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -48,6 +49,7 @@
                         <span th:text="${actor.firstName} + ' ' + ${actor.lastName}"></span>
                     </div>
                 </td>
+                <td th:text="${film.pictureUrl}"></td>
                 <td>
                     <a th:href="@{/admin/films/update/{filmId}(filmId=${film.filmId})}"
                        class="btn btn-primary btn-sm">Update</a>

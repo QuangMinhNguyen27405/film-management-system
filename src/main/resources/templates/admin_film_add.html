@@ -16,6 +16,16 @@
             <label for="releaseYear" class="col-form-label">Release Year:</label>
             <input type="text" class="form-control" id="releaseYear" name="releaseYear"/>
         </div>
+        <!-- Film Length -->
+        <div class="form-group">
+            <label for="length" class="col-form-label">Length(minutes):</label>
+            <input type="text" class="form-control" id="length" name="length"/>
+        </div>
+        <!-- Film Rating -->
+        <div class="form-group">
+            <label for="rating" class="col-form-label">Rating:</label>
+            <input type="text" class="form-control" id="rating" name="rating"/>
+        </div>
         <!-- Film Category -->
         <div class="form-group">
             <label class="col-form-label">Category:</label>
@@ -28,7 +38,7 @@
         </div>
         <!-- Film Rental Rate -->
         <div class="form-group">
-            <label for="rentalRate" class="col-form-label">Rental Rate</label>
+            <label for="rentalRate" class="col-form-label">Rental Rate($)</label>
             <input type="text" class="form-control" id="rentalRate" name="rentalRate"/>
         </div>
         <!-- Film Description -->
@@ -53,6 +63,11 @@
                 <input type="text" class="form-control mb-2" name="actors" placeholder="Actor Name"/>
             </div>
             <button type="button" id="addActorBtn" class="btn btn-secondary mt-2">Add Actor</button>
+        </div>
+        <!-- Film Poster URL -->
+        <div class="form-group">
+            <label for="pictureUrl" class="col-form-label">Picture URL</label>
+            <input type="text" class="form-control" id="pictureUrl" name="pictureUrl"/>
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
         <a th:href="@{/admin/films/page}" class="btn btn-danger">Cancel</a>

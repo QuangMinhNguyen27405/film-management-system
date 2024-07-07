@@ -7,19 +7,24 @@ import com.crm.security.JwtService;
 import com.crm.security.SecurityUtils;
 import com.crm.service.impl.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 
 @Controller
@@ -36,13 +41,13 @@ public class CustomerController {
     @Autowired
     private JwtService jwtService;
 
-    SecurityUtils securityUtils = new SecurityUtils();
-
-    Authentication auth = securityUtils.getUserAuthentication();
+    @Autowired
+    SecurityUtils securityUtils;
 
     @GetMapping("/signup")
     public String showSignupForm(HttpServletRequest request, Model model){
-        if(auth != null && auth.isAuthenticated()){
+        Authentication auth = securityUtils.getUserAuthentication();
+        if(!(auth instanceof AnonymousAuthenticationToken)){
             return "redirect:/home";
         }
         model.addAttribute("pageTitle", "Sign Up");
@@ -61,16 +66,17 @@ public class CustomerController {
             if (newCustomer != null) {
                 System.out.println("Sign Up Successfully");
             }
-            return "login";
+            return "redirect:/login";
 
         } catch (DuplicateEmailException ex){
-            return "login";
+            return "redirect:/signup";
         }
     }
 
     @GetMapping("/login")
     private String showLoginForm(HttpServletRequest request, Model model){
-        if(auth != null && auth.isAuthenticated()){
+        Authentication auth = securityUtils.getUserAuthentication();
+        if(!(auth instanceof AnonymousAuthenticationToken)){
             return "redirect:/home";
         }
         model.addAttribute("login", false);
@@ -81,7 +87,8 @@ public class CustomerController {
 
     @GetMapping("/login?error")
     private String showLoginFormError(HttpServletRequest request, Model model){
-        if(auth.isAuthenticated()){
+        Authentication auth = securityUtils.getUserAuthentication();
+        if(!(auth instanceof AnonymousAuthenticationToken)){
             return "redirect:/home";
         }
 
@@ -97,14 +104,21 @@ public class CustomerController {
         System.out.println("CustomerController - doLogin()");
 
         try {
-            // Throws exception if the credential is not correct
-            Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(customer.getEmail(), customer.getPassword()));
+            UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(customer.getEmail(), customer.getPassword());
+            Authentication authentication = authenticationManager.authenticate(authReq);
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext .setAuthentication(authentication);
+
+            HttpSession session = request.getSession();
 
             // Generate token
             String token = jwtService.generateToken(customer.getEmail());
+
             // Store token in the session
-            request.getSession().setAttribute("token", token);
+            session.setAttribute("token", token);
+
+            // Set security context in session
+            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, securityContext);
             // Redirect to Home Page
             return "redirect:/home";
         } catch (AuthenticationException e) {
@@ -116,7 +130,8 @@ public class CustomerController {
 
     @GetMapping("/customer/profile/{customerId}")
     private String showUpdateForm(@RequestParam Long customerId){
-        if(auth != null && auth.isAuthenticated()){
+        Authentication auth = securityUtils.getUserAuthentication();
+        if(!(auth instanceof AnonymousAuthenticationToken)){
             return "redirect:/login";
         }
         return "profile";

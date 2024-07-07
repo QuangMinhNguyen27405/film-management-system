@@ -1,6 +1,7 @@
 package com.crm.security;
 
 import com.crm.entity.Customer;
+import com.crm.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class UserPrincipal implements UserDetails {
 
-    private Customer customer;
+    private final Customer customer;
 
     public UserPrincipal(Customer customer){
         this.customer = customer;
@@ -21,13 +22,15 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
+        List<Role> roles = customer.getRoles();
+        Collection<? extends GrantedAuthority> mapRoles = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
 
-    //    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return customer.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-//    }
+        mapRoles.forEach(authority -> System.out.println("Granted Authority: " + authority.getAuthority()));
+
+        return mapRoles;
+    }
 
     @Override
     public boolean isCredentialsNonExpired() {

@@ -75,7 +75,7 @@ public class AdminController {
     }
 
     // Find customer
-    @GetMapping("customers/findCustomer/{customerId}")
+    @GetMapping("/customers/findCustomer/{customerId}")
     @ResponseBody
     public Customer findCustomer(@PathVariable Long customerId){
         System.out.println("AdminController - findOne()");

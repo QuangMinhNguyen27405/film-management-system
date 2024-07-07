@@ -41,6 +41,7 @@ public class FilmService {
                 filmActor.add(dbActor.get());
             }
             else{
+                actorRepository.save(actor);
                 filmActor.add(actor);
             }
         }

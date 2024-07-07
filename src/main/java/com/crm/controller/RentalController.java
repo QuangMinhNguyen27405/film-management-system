@@ -11,17 +11,11 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/v1")
+@RequestMapping("/")
 public class RentalController {
 
     @Autowired
     private RentalRepository rentalRepository;
-
-    @GetMapping("/rentals")
-    public List<Rental> fetchCustomers (){
-        System.out.println("RentalController - fetchRental()");
-        return rentalRepository.findAll();
-    }
 
     @PostMapping("/rentals")
     public List<Rental> createRental(@RequestBody List<Rental> rentals){ //@Request Body: Lay file JSON

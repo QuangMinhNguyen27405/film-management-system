@@ -21,6 +21,16 @@
             <label for="releaseYear" class="col-form-label">Release Year:</label>
             <input type="text" class="form-control" id="releaseYear" name="releaseYear" th:value="${film.releaseYear}" />
         </div>
+        <!-- Film Length -->
+        <div class="form-group">
+            <label for="length" class="col-form-label">Length(minutes):</label>
+            <input type="text" class="form-control" id="length" name="length" th:value="${film.length}"/>
+        </div>
+        <!-- Film Rating -->
+        <div class="form-group">
+            <label for="rating" class="col-form-label">Rating:</label>
+            <input type="text" class="form-control" id="rating" name="rating" th:value="${film.rating}"/>
+        </div>
         <!-- Film Category -->
         <div class="form-group">
             <label class="col-form-label">Category:</label>
@@ -34,7 +44,7 @@
         </div>
         <!-- Film Rental Rate -->
         <div class="form-group">
-            <label for="rentalRate" class="col-form-label">Rental Rate</label>
+            <label for="rentalRate" class="col-form-label">Rental Rate($)</label>
             <input type="text" class="form-control" id="rentalRate" name="rentalRate" th:value="${film.rentalRate}" />
         </div>
         <!-- Film Description -->
@@ -61,7 +71,11 @@
             </div>
             <button type="button" id="addActorBtn" class="btn btn-secondary mt-2">Add Actor</button>
         </div>
-
+        <!-- Film Poster URL -->
+        <div class="form-group">
+            <label for="pictureUrl" class="col-form-label">Picture URL</label>
+            <input type="text" class="form-control" id="pictureUrl" name="pictureUrl" th:value="${film.pictureUrl}"/>
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
         <a th:href="@{/admin/films/page}" class="btn btn-danger">Cancel</a>
     </form>

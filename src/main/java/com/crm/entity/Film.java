@@ -59,7 +59,7 @@ public class Film {
     private String fullText;
 
     @Column(name = "picture_url")
-    private String pictureURL;
+    private String pictureUrl;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

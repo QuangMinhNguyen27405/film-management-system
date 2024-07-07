@@ -44,6 +44,8 @@ public class AppSecurityConfig {
                         .requestMatchers("/signup").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/home").permitAll()
+                        .requestMatchers("/film/**").permitAll()
+                        .requestMatchers("/logout").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/fonts/**", "/dummy/**", "/images/**").permitAll()
                         .requestMatchers("/customer/profile/*").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -52,8 +54,15 @@ public class AppSecurityConfig {
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/logout-success").permitAll()
+                        .logoutSuccessUrl("/home").permitAll()
+                        .addLogoutHandler((request, response, authentication) -> {
+                            System.out.println("Logout handler invoked");
+                            if (authentication != null) {
+                                System.out.println("Authentication: " + authentication.getName());
+                            }
+                        })
                 )
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 ;
 
@@ -62,13 +71,9 @@ public class AppSecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-
-        //decode password
         provider.setPasswordEncoder(passwordEncoder);
-
         return provider;
     }
 

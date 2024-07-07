@@ -1,37 +1,13 @@
-# Docker Compose file for defining services and their dependencies.
+version: '3.8'
 
 services:
-  server:
-    build:
-      context: .
+  app:
+    build: .
     ports:
-      - "8081:8081"
-    depends_on:
-      db:
-        condition: service_healthy
+      - "8080:8080"
     networks:
-      - s-network
-
-  db:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - db-data:/var/lib/mysql/data
-    expose:
-      - "3306"
-    networks:
-      - s-network
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - film_rental-network
 
 networks:
-  s-network:
+  film_rental-network:
     driver: bridge
-
-volumes:
-  db-data:
