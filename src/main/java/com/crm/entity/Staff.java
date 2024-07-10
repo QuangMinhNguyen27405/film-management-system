@@ -2,6 +2,7 @@ package com.crm.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "staffs")
 public class Staff {
@@ -20,7 +22,7 @@ public class Staff {
     @Column(name = "staff_id")
     private Long staffId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private Address address;
 
@@ -50,7 +52,7 @@ public class Staff {
     private LocalDateTime lastUpdate;
 
     @Column(name = "picture_url")
-    private String pictureURL;
+    private String pictureUrl;
 
     public Staff() {
         this.lastUpdate = LocalDateTime.now();

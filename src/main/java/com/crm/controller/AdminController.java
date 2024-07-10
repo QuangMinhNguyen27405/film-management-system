@@ -9,6 +9,7 @@ import com.crm.repository.RoleRepository;
 import com.crm.service.impl.CategoryService;
 import com.crm.service.impl.CustomerService;
 import com.crm.service.impl.FilmService;
+import com.crm.service.impl.StaffService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,10 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
+
+    @Autowired
+    private StaffService staffService;
 
     @Autowired
     private FilmService filmService;
@@ -61,7 +65,7 @@ public class AdminController {
     @GetMapping("/customers/page/{pageNo}")
     public String findPaginatedCustomer(@PathVariable (value = "pageNo") int pageNo, Model model){
 
-        int pageSize = 8;
+        int pageSize = 4;
 
         Page<Customer> page = customerService.findPaginated(pageNo, pageSize);
         List<Customer> listCustomer = page.getContent();
@@ -156,10 +160,10 @@ public class AdminController {
     }
 
     // Films pagination display
-    @PostMapping("film/page/{pageNo}")
+    @GetMapping("/films/page/{pageNo}")
     public String findPaginatedFilm(@PathVariable (value = "pageNo") int pageNo, Model model){
 
-        int pageSize = 8;
+        int pageSize = 4;
 
         Page<Film> page = filmService.findPaginated(pageNo, pageSize);
         List<Film> filmList = page.getContent();
@@ -173,7 +177,7 @@ public class AdminController {
     }
 
     // Find Film
-    @GetMapping("films/findFilm/{filmId}")
+    @GetMapping("/films/findFilm/{filmId}")
     public Film findFilm(@PathVariable Long filmId){
         System.out.println("FilmControl - findFilm()");
         try{
@@ -235,6 +239,31 @@ public class AdminController {
         } catch (Exception ex){
             return "redirect:/admin/films/page";
         }
+    }
+
+    // STAFF ADMINISTRATIONS
+
+    // Staffs pagination default page 1
+    @GetMapping("/staffs/page")
+    public String staffsHomePage(Model model){
+        return findPaginatedStaff(1, model);
+    }
+
+    // Staffs pagination display
+    @GetMapping("/staffs/page/{pageNo}")
+    public String findPaginatedStaff(@PathVariable (value = "pageNo") int pageNo, Model model){
+
+        int pageSize = 3;
+
+        Page<Staff> page = staffService.findPaginated(pageNo, pageSize);
+        List<Staff> staffList = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("staffs", staffList);
+
+        return "admin_staffs";
     }
 
 }

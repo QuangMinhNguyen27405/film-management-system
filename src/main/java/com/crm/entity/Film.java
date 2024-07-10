@@ -61,7 +61,7 @@ public class Film {
     @Column(name = "picture_url")
     private String pictureUrl;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "film_category",
             joinColumns = @JoinColumn(name = "film_id"),

@@ -66,8 +66,8 @@
         <!-- Film Actors -->
         <div class="form-group" id="film_actor">
             <label class="col-form-label">Main Actors</label>
-            <div id="actorsContainer" th:each="actor : ${film.actors}">
-                <input type="text" class="form-control mb-2" name="actors" th:value="${actor.firstName + ' ' + actor.lastName}" />
+            <div id="actorsContainer">
+                <input type="text" th:each="actor : ${film.actors}" class="form-control mb-2" name="actors" th:value="${actor.firstName + ' ' + actor.lastName}" />
             </div>
             <button type="button" id="addActorBtn" class="btn btn-secondary mt-2">Add Actor</button>
         </div>

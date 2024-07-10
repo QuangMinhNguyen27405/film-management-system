@@ -29,7 +29,6 @@ public class Category {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private List<Film> films = new ArrayList<>();
 

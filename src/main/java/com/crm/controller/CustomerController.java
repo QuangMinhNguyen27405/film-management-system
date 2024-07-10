@@ -124,6 +124,8 @@ public class CustomerController {
         } catch (AuthenticationException e) {
             // Redirect to Log In Error URL
             return "redirect:/login?error";
+        } catch (Exception e){
+            return "redirect:/login?error";
         }
 
     }
