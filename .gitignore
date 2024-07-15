@@ -34,3 +34,5 @@ build/
 
 ### Environment Properties ###
 /src/main/resources/application.properties
+myec2key.pem
+k8s.yaml
