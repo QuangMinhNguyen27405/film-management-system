@@ -36,3 +36,7 @@ build/
 /src/main/resources/application.properties
 myec2key.pem
 k8s.yaml
+.mvn/wrapper
+mvnw
+mvnw.cmd
+pom.xml
