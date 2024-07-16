@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class StaffService {
+public class StaffServiceImpl {
     @Autowired
     private StaffRepository staffRepository;
 

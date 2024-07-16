@@ -6,7 +6,6 @@ import com.crm.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -44,10 +43,12 @@ public class DataLoader implements CommandLineRunner {
     private StoreService storeService;
 
     @Autowired
-    private StaffService staffService;
+    private StaffServiceImpl staffServiceImpl;
 
     @Autowired
     private StoreRepository storeRepository;
+    @Autowired
+    private InventoryServiceImpl inventoryServiceImpl;
 
     @Override
     public void run(String... args) throws Exception {
@@ -88,7 +89,7 @@ public class DataLoader implements CommandLineRunner {
             adventure.setName("Adventure");
 
             Category thriller = new Category();
-            thriller.setName("thriller");
+            thriller.setName("Thriller");
 
             categoryService.createCategory(action);
             categoryService.createCategory(comedy);
@@ -186,7 +187,6 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    @Transactional
     public void loadFilms() {
         if(filmService.fetchFilms().isEmpty()){
 
@@ -241,7 +241,10 @@ public class DataLoader implements CommandLineRunner {
             filmTheCroods.setFullText("Family, Adventure, Comedy");
 
             // Picture URL
-            filmTheCroods.setPictureUrl("/dummy/single-image.jpg");
+            filmTheCroods.setPictureUrl("/dummy/dummy-cro.jpg");
+
+            // Logo URL
+            filmTheCroods.setLogoUrl("/dummy/logo-cro.jpg");
 
             // Special Features
             filmTheCroods.setSpecialFeatures("Deleted Scenes, Behind the Scenes");
@@ -305,7 +308,10 @@ public class DataLoader implements CommandLineRunner {
             filmTheHobbit.setFullText("Fantasy, Adventure, Epic");
 
             // Picture URL
-            filmTheHobbit.setPictureUrl("/dummy/thumb-5@2x.jpg");
+            filmTheHobbit.setPictureUrl("/dummy/dummy-hob.jpg");
+
+            // Logo URL
+            filmTheHobbit.setLogoUrl("/dummy/logo-hob.jpg");
 
             // Special Features
             filmTheHobbit.setSpecialFeatures("Extended Edition, Behind the Scenes");
@@ -370,7 +376,10 @@ public class DataLoader implements CommandLineRunner {
             filmMaleficent.setFullText("Fantasy, Adventure, Action");
 
             // Picture URL
-            filmMaleficent.setPictureUrl("/dummy/thumb-3@2x.jpg");
+            filmMaleficent.setPictureUrl("/dummy/dummy-male.jpg");
+
+            // Logo URL
+            filmMaleficent.setLogoUrl("/dummy/logo-male.jpg");
 
             // Special Features
             filmMaleficent.setSpecialFeatures("Deleted Scenes, Director's Commentary");
@@ -436,7 +445,10 @@ public class DataLoader implements CommandLineRunner {
             filmLifeOfPi.setFullText("Adventure, Drama, Fantasy");
 
             // Picture URL
-            filmLifeOfPi.setPictureUrl("/dummy/thumb-7@2x.jpg");
+            filmLifeOfPi.setPictureUrl("/dummy/dummy-pi.jpg");
+
+            // Logo URL
+            filmLifeOfPi.setLogoUrl("/dummy/logo-pi.jpg");
 
             // Special Features
             filmLifeOfPi.setSpecialFeatures("3D Edition, Making of");
@@ -448,7 +460,6 @@ public class DataLoader implements CommandLineRunner {
             filmLifeOfPi.setRating(4L);
 
             filmService.createFilm(filmLifeOfPi);
-
 
             // Film Exists
             Film filmExists = new Film();
@@ -500,7 +511,10 @@ public class DataLoader implements CommandLineRunner {
             filmExists.setFullText("Horror, Thriller, Found Footage");
 
             // Picture URL
-            filmExists.setPictureUrl("/dummy/thumb-8@2x.jpg");
+            filmExists.setPictureUrl("/dummy/dummy-exi.jpg");
+
+            // Logo URL
+            filmExists.setLogoUrl("/dummy/logo-exi.jpg");
 
             // Special Features
             filmExists.setSpecialFeatures("Deleted Scenes, Making of");
@@ -563,7 +577,10 @@ public class DataLoader implements CommandLineRunner {
             filmRobocop.setFullText("Action, Science-Fiction, Cyberpunk");
             
             // Picture URL
-            filmRobocop.setPictureUrl("/dummy/thumb-2@2x.jpg");
+            filmRobocop.setPictureUrl("/dummy/dummy-robo.jpg");
+
+            // Logo URL
+            filmRobocop.setLogoUrl("/dummy/logo-robo.jpg");
             
             // Special Features
             filmRobocop.setSpecialFeatures("Director's Cut, Behind the Scenes");
@@ -627,7 +644,10 @@ public class DataLoader implements CommandLineRunner {
             filmDriveHard.setFullText("Action, Comedy, Heist");
             
             // Picture URL
-            filmDriveHard.setPictureUrl("/dummy/thumb-1@2x.jpg");
+            filmDriveHard.setPictureUrl("/dummy/dummy-dri.jpg");
+
+            // Logo Url
+            filmDriveHard.setLogoUrl("/dummy/logo-dri.jpg");
             
             // Special Features
             filmDriveHard.setSpecialFeatures("Bloopers, Deleted Scenes");
@@ -693,7 +713,10 @@ public class DataLoader implements CommandLineRunner {
             filmTheColony.setFullText("Action, Science-Fiction, Horror");
             
             // Picture URL
-            filmTheColony.setPictureUrl("/dummy/thumb-8@2x.jpg");
+            filmTheColony.setPictureUrl("/dummy/dummy-col.jpg");
+
+            // Logo URL
+            filmTheColony.setLogoUrl("/dummy/logo-col.jpg");
             
             // Special Features
             filmTheColony.setSpecialFeatures("Director's Commentary, Making of");
@@ -706,6 +729,70 @@ public class DataLoader implements CommandLineRunner {
             
             filmService.createFilm(filmTheColony);
 
+            // Film Tin Tin
+            Film filmTintin = new Film();
+            filmTintin.setTitle("The Adventures of Tintin");
+
+            // Create actors
+            List<Actor> actorListTintin = new ArrayList<>();
+
+            Actor actorTintin1 = new Actor();
+            actorTintin1.setFirstName("Jamie");
+            actorTintin1.setLastName("Bell");
+
+            Actor actorTintin2 = new Actor();
+            actorTintin2.setFirstName("Andy");
+            actorTintin2.setLastName("Serkis");
+
+            actorListTintin.add(actorTintin1);
+            actorListTintin.add(actorTintin2);
+
+            filmTintin.setActors(actorListTintin);
+
+            // Create Categories
+            List<Category> categoryListTintin = new ArrayList<>();
+            Optional<Category> dbAdventureTintin = categoryRepository.findByName("Adventure");
+            Optional<Category> dbAnimationTintin = categoryRepository.findByName("Animation");
+            dbAdventureTintin.ifPresent(categoryListTintin::add);
+            dbAnimationTintin.ifPresent(categoryListTintin::add);
+            filmTintin.setCategories(categoryListTintin);
+
+            // Create Language
+            Optional<Language> dbLanguageTintin = languageRepository.findByName("English");
+            dbLanguageTintin.ifPresent(filmTintin::setLanguage);
+
+            // Description
+            filmTintin.setDescription("The Adventures of Tintin is a 3D motion capture computer-animated action-adventure film based on The Adventures of Tintin, the comic book series created by Belgian cartoonist Hergé.");
+
+            // Release Year
+            filmTintin.setReleaseYear(2011);
+
+            // Rental Rate
+            filmTintin.setRentalRate(BigDecimal.valueOf(1.50));
+
+            // Replacement Cost
+            filmTintin.setReplacementCost(BigDecimal.valueOf(20));
+
+            // Full Text
+            filmTintin.setFullText("Family, Adventure, Animation");
+
+            // Picture URL
+            filmTintin.setPictureUrl("/dummy/dummy-tin.jpg");
+
+            // Logo URL
+            filmTintin.setLogoUrl("/dummy/logo-tin.jpg");
+
+            // Special Features
+            filmTintin.setSpecialFeatures("Behind the Scenes, Deleted Scenes");
+
+            // Length
+            filmTintin.setLength(107);
+
+            // Rating
+            filmTintin.setRating(4L);
+
+            // Save the film
+            filmService.createFilm(filmTintin);
         }
     }
 
@@ -731,9 +818,8 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    @Transactional
     public void loadStaffs() {
-        if (staffService.fetchStaffs().isEmpty()) {
+        if (staffServiceImpl.fetchStaffs().isEmpty()) {
             // Ensure stores are managed entities
             Optional<Store> store1Optional = storeRepository.findByAddress("1980 Woodward Ave, Tally, Florida");
             Optional<Store> store2Optional = storeRepository.findByAddress("17 Duy Tan");
@@ -762,7 +848,7 @@ public class DataLoader implements CommandLineRunner {
             staff1.setAddress(new Address("19 Duy Tan"));
             staff1.setPictureUrl("/dummy/person-1.jpg");
             store2Optional.ifPresent(staff1::setStore); // Assign store2 to staff1
-            staffService.createStaff(staff1);
+            staffServiceImpl.createStaff(staff1);
 
             // Create and persist staff2
             Staff staff2 = new Staff();
@@ -774,7 +860,7 @@ public class DataLoader implements CommandLineRunner {
             staff2.setAddress(new Address("21 Duy Tan"));
             staff2.setPictureUrl("/dummy/person-2.jpg");
             store2Optional.ifPresent(staff2::setStore); // Assign store2 to staff2
-            staffService.createStaff(staff2);
+            staffServiceImpl.createStaff(staff2);
 
             // Create and persist staff3
             Staff staff3 = new Staff();
@@ -786,7 +872,7 @@ public class DataLoader implements CommandLineRunner {
             staff3.setAddress(new Address("789 Oak Avenue"));
             staff3.setPictureUrl("/dummy/person-3.jpg");
             store1Optional.ifPresent(staff3::setStore); // Assign store1 to staff3
-            staffService.createStaff(staff3);
+            staffServiceImpl.createStaff(staff3);
 
             // Create and persist staff4
             Staff staff4 = new Staff();
@@ -798,7 +884,7 @@ public class DataLoader implements CommandLineRunner {
             staff4.setAddress(new Address("45 Elm Street"));
             staff4.setPictureUrl("/dummy/person-4.jpg");
             store1Optional.ifPresent(staff4::setStore); // Assign store1 to staff4
-            staffService.createStaff(staff4);
+            staffServiceImpl.createStaff(staff4);
 
             // Create and persist staff5
             Staff staff5 = new Staff();
@@ -810,8 +896,19 @@ public class DataLoader implements CommandLineRunner {
             staff5.setPictureUrl("/dummy/person-1.jpg");
             staff5.setAddress(new Address("123 Maple Road"));
             store2Optional.ifPresent(staff5::setStore); // Assign store2 to staff5
-            staffService.createStaff(staff5);
+            staffServiceImpl.createStaff(staff5);
         }
     }
 
+    private void loadInventorys(){
+        if(inventoryServiceImpl.fetchInventory().isEmpty()){
+            List<Film> filmList = filmService.fetchFilms();
+
+            for (int i = 1; i <= 30; i++) {
+                Inventory inventory = new Inventory();
+                inventory.setFilm(filmList.get(i % filmList.size())); // Assign films cyclically
+                inventoryServiceImpl.createInventory(inventory);
+            }
+        }
+    }
 }

@@ -81,6 +81,10 @@ public class FilmService {
         return dbFilm.get();
     }
 
+    public List<Film> findFilmByCategory(String name){
+        return filmRepository.findAllByCategory(name);
+    }
+
     public Page<Film> findPaginated(int pageNo, int pageSize){
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.filmRepository.findAll(pageable);

@@ -61,6 +61,9 @@ public class Film {
     @Column(name = "picture_url")
     private String pictureUrl;
 
+    @Column(name = "logo_url")
+    private String logoUrl;
+
     @ManyToMany
     @JoinTable(
             name = "film_category",

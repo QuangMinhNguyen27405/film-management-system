@@ -9,7 +9,7 @@ import com.crm.repository.RoleRepository;
 import com.crm.service.impl.CategoryService;
 import com.crm.service.impl.CustomerService;
 import com.crm.service.impl.FilmService;
-import com.crm.service.impl.StaffService;
+import com.crm.service.impl.StaffServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class AdminController {
     private CustomerService customerService;
 
     @Autowired
-    private StaffService staffService;
+    private StaffServiceImpl staffServiceImpl;
 
     @Autowired
     private FilmService filmService;
@@ -255,7 +255,7 @@ public class AdminController {
 
         int pageSize = 3;
 
-        Page<Staff> page = staffService.findPaginated(pageNo, pageSize);
+        Page<Staff> page = staffServiceImpl.findPaginated(pageNo, pageSize);
         List<Staff> staffList = page.getContent();
 
         model.addAttribute("currentPage", pageNo);

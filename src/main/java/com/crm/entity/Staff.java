@@ -30,7 +30,7 @@ public class Staff {
     @JoinColumn(name = "store_id", referencedColumnName = "store_id")
     private Store store;
 
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "paymentId", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
 
     @Column(name = "firstName")

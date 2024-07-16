@@ -10,4 +10,7 @@ import java.util.List;
 
 @Repository
 public interface FilmRepository extends JpaRepository<Film, Long> {
+
+    @Query("from Film f join f.categories c where c.name = ?1")
+    List<Film> findAllByCategory(String name);
 }

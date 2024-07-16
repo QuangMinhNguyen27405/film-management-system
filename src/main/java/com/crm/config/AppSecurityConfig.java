@@ -44,7 +44,7 @@ public class AppSecurityConfig {
                         .requestMatchers("/signup").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/home").permitAll()
-                        .requestMatchers("/films/*").permitAll()
+                        .requestMatchers("/films/**").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/fonts/**", "/dummy/**", "/images/**").permitAll()
                         .requestMatchers("/customer/profile/*").hasRole("USER")
