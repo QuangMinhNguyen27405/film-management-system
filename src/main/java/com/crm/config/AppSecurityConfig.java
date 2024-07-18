@@ -37,6 +37,8 @@ public class AppSecurityConfig {
                         .requestMatchers("/signup").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/home").permitAll()
+                        .requestMatchers("/about").permitAll()
+                        .requestMatchers("/joinus").permitAll()
                         .requestMatchers("/films/**").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/fonts/**", "/dummy/**", "/images/**").permitAll()
@@ -49,12 +51,6 @@ public class AppSecurityConfig {
                         .clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login?status=logout").permitAll()
-                        .addLogoutHandler((request, response, authentication) -> {
-                            System.out.println("Logout handler invoked");
-                            if (authentication != null) {
-                                System.out.println("Authentication: " + authentication.getName());
-                            }
-                        })
                 )
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

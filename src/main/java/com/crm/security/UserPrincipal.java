@@ -2,6 +2,7 @@ package com.crm.security;
 
 import com.crm.entity.Customer;
 import com.crm.entity.Role;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 public class UserPrincipal implements UserDetails {
 
     private final Customer customer;
@@ -27,9 +29,10 @@ public class UserPrincipal implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
-        mapRoles.forEach(authority -> System.out.println("Granted Authority: " + authority.getAuthority()));
-
+        mapRoles.forEach(authority -> log.info("Granted Authority: " + authority.getAuthority()));
+        
         return mapRoles;
+
     }
 
     @Override

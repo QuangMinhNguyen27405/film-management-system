@@ -9,9 +9,8 @@ import com.crm.service.impl.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 
+@Log4j2
 @Controller
 @CrossOrigin("*")
 @RequestMapping("/")
@@ -58,13 +58,14 @@ public class CustomerController {
     @PostMapping("/signup")
     public String doSignup(@ModelAttribute @Valid Customer customer,
                            HttpServletRequest request, Model model, BindingResult result){
-        System.out.println("CustomerController - doSignup()");
+
+        log.info("CustomerController - doSignup()");
 
         try {
             //Call Service Layer
             Customer newCustomer = customerService.createCustomer(customer);
             if (newCustomer != null) {
-                System.out.println("Sign Up Successfully");
+                log.info("Sign Up Successfully");
             }
             return "redirect:/login";
 
@@ -74,8 +75,7 @@ public class CustomerController {
     }
 
     @GetMapping("/login")
-    private String showLoginForm(HttpServletRequest request,
-                                 Model model,
+    private String showLoginForm(Model model,
                                  @RequestParam(value = "status", required = false) String status){
 
         Authentication auth = securityUtils.getUserAuthentication();
@@ -94,10 +94,13 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    private String doLogin(@ModelAttribute @Valid Customer customer, BindingResult result,
-                           HttpServletRequest request, Model model){
+    public String doLogin(@ModelAttribute @Valid Customer customer,
+                           BindingResult result,
+                           HttpServletRequest request){
 
-        System.out.println("CustomerController - doLogin()");
+        if(result.hasErrors()){
+            return "redirect:/login?status=login_error";
+        }
 
         try {
             UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(customer.getEmail(), customer.getPassword());
@@ -129,7 +132,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer/profile/{customerId}")
-    private String showUpdateForm(@RequestParam Long customerId){
+    public String showUpdateForm(@RequestParam Long customerId){
         Authentication auth = securityUtils.getUserAuthentication();
         if(!(auth instanceof AnonymousAuthenticationToken)){
             return "redirect:/login";
@@ -143,7 +146,7 @@ public class CustomerController {
                            HttpServletRequest request,
                            BindingResult result, Model model){
 
-        System.out.println("CustomerController - updateCustomer()");
+        log.info("CustomerController - updateCustomer()");
         try {
             customerService.updateCustomer(customer);
             return "redirect:/profile/" + customerId;

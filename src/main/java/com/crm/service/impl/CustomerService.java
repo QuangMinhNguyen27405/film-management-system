@@ -6,6 +6,7 @@ import com.crm.exception.custom.DuplicateEmailException;
 import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.AddressRepository;
 import com.crm.repository.CustomerRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Component
 public class CustomerService {
     @Autowired
@@ -40,13 +42,17 @@ public class CustomerService {
     }
 
     public Customer createCustomer(Customer customer){
-        //find for existing address
+        // Customer must be active
+        if(!customer.isActive()){
+            customer.setActive(true);
+        }
+        // find for existing address
         if(customer.getAddress() != null) {
             String address = customer.getAddress().getAddress();
             Optional<Address> dbAddress = addressRepository.findByAddress(address);
             dbAddress.ifPresent(customer::setAddress);
         }
-        //encode user password
+        // encode user password
         String encodedPassword = passwordEncoder.encode(customer.getPassword());
         customer.setPassword(encodedPassword);
         return customerRepository.save(customer);
@@ -92,8 +98,9 @@ public class CustomerService {
     }
 
     public Customer findCustomerByEmail(String email){
-        Optional<Customer> dbCustomer = customerRepository.findByEmail(email);
+        Optional<Customer> dbCustomer = customerRepository.findByEmailActive(email);
         if(dbCustomer.isEmpty()){
+            log.info("Not found customer with email " + email + " with active status");
             throw new RecordNotFoundException("Customer with email " + email + " does not exist");
         }
         return dbCustomer.get();

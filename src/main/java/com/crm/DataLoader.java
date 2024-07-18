@@ -183,6 +183,7 @@ public class DataLoader implements CommandLineRunner {
             admin.setEmail("admin@email.com");
             admin.setPassword("Steve@123");
             admin.setRoles(roles);
+            admin.setActive(true);
 
             customerService.createCustomer(admin);
         }

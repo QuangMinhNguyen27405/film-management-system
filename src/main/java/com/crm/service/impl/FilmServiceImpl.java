@@ -5,6 +5,7 @@ import com.crm.exception.custom.OutOfStockException;
 import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.*;
 import com.crm.security.SecurityUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Component
 public class FilmServiceImpl {
     @Autowired
@@ -107,9 +109,9 @@ public class FilmServiceImpl {
 
     public String rentFilm(Long filmId, Long storeId) {
         try {
-            System.out.println("Rent Film with id" + filmId);
+            log.info("Rent Film with id " + filmId);
             String userEmailLoggedIn = securityUtils.getUserLoggedIn();
-            System.out.println("User email:" + userEmailLoggedIn);
+            log.info("User email: " + userEmailLoggedIn);
 
             Rental rental = new Rental();
 
@@ -134,7 +136,7 @@ public class FilmServiceImpl {
             throw new OutOfStockException();
         }
         for(Inventory inventory : dbInventoryList){
-            if(inventory.getRentals() != null){
+            if(inventory.getRentals() == null){
                 return inventory;
             }
         }

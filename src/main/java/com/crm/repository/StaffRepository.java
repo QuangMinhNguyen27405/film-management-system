@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Long> {
 
-    @Query("from Staff s where s.email = ?1 and s.id <> ?2")
-    Staff findByEmaiExcludeId(String email, Long staffId);
+    @Query("from Staff s where s.email = ?1 and s.staffId <> ?2")
+    Staff findByEmailExcludeId(String email, Long staffId);
 }

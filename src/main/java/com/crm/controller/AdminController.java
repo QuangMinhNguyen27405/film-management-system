@@ -12,6 +12,7 @@ import com.crm.service.impl.FilmServiceImpl;
 import com.crm.service.impl.StaffServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log4j2
 @Controller
 @RequestMapping("/admin")
 @CrossOrigin("*")
@@ -82,7 +84,7 @@ public class AdminController {
     @GetMapping("/customers/findCustomer/{customerId}")
     @ResponseBody
     public Customer findCustomer(@PathVariable Long customerId){
-        System.out.println("AdminController - findOne()");
+        log.info("AdminController - findOne()");
         try {
             return customerService.findCustomer(customerId);
         } catch (RecordNotFoundException ex) {
@@ -103,7 +105,7 @@ public class AdminController {
     // Update or save customer
     @PostMapping("/customers/new")
     public String doCreateCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model){
-        System.out.println(("Admin Controller - saveCustomer()"));
+        log.info(("Admin Controller - saveCustomer()"));
         try {
             customerService.createCustomer(customer);
             return "redirect:/admin/customers/page/1";
@@ -128,7 +130,7 @@ public class AdminController {
 
     @PostMapping("/customers/update")
     public String doUpdateCustomer(@ModelAttribute @Valid Customer customer, BindingResult result, Model model){
-        System.out.println(("Admin Controller - saveCustomer()"));
+        log.info(("Admin Controller - saveCustomer()"));
         try {
             customerService.updateCustomer(customer);
             return "redirect:/admin/customers/page/1";
@@ -142,7 +144,7 @@ public class AdminController {
     // Deactivate Status Of Customer
     @GetMapping("customers/deactivate/{customerId}")
     public String deactivateCustomer(@PathVariable Long customerId){
-        System.out.println(("Admin Controller - deactivateCustomer()"));
+        log.info(("Admin Controller - deactivateCustomer()"));
         try {
             customerService.deactivateCustomer(customerId);
             return "redirect:/admin/customers/page/1";
@@ -179,7 +181,7 @@ public class AdminController {
     // Find Film
     @GetMapping("/films/findFilm/{filmId}")
     public Film findFilm(@PathVariable Long filmId){
-        System.out.println("FilmControl - findFilm()");
+        log.info("FilmControl - findFilm()");
         try{
             return filmServiceImpl.findFilm(filmId);
         } catch (RecordNotFoundException ex){
@@ -204,7 +206,7 @@ public class AdminController {
     public String doCreateFilm(@ModelAttribute @Valid Film film,
                               Model model, BindingResult result){
 
-        System.out.println("FilmControl - doCreateFilm()");
+        log.info("FilmControl - doCreateFilm()");
         try {
             filmServiceImpl.createFilm(film);
             return "redirect:/admin/films/page";
@@ -232,7 +234,7 @@ public class AdminController {
     public String doUpdateFilm(@ModelAttribute @Valid Film film,
                               Model model, BindingResult result){
 
-        System.out.println("FilmControl - doUpdateFilm()");
+        log.info("FilmControl - doUpdateFilm()");
         try {
             filmServiceImpl.updateFilm(film);
             return "redirect:/admin/films/page";

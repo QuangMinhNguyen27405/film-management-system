@@ -4,12 +4,14 @@ import com.crm.entity.Inventory;
 import com.crm.entity.Inventory;
 import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.InventoryRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/v1")
@@ -20,19 +22,19 @@ public class InventoryController {
 
     @GetMapping("/inventories")
     public List<Inventory> fetchCustomers (){
-        System.out.println("InventoryController - fetchInventory()");
+        log.info("InventoryController - fetchInventory()");
         return inventoryRepository.findAll();
     }
 
     @PostMapping("/inventories")
     public List<Inventory> createInventory(@RequestBody List<Inventory> inventories){ //@Request Body: Lay file JSON
-        System.out.println("InventoryController - createInventory()");
+        log.info("InventoryController - createInventory()");
         return inventoryRepository.saveAll(inventories);
     }
 
     @PutMapping("/inventories/{inventoryId}")
     public Inventory updateInventory(@PathVariable Long inventoryId, @RequestBody Inventory inventory){
-        System.out.println("InventoryController - updateInventory()");
+        log.info("InventoryController - updateInventory()");
         Optional<Inventory> dbInventory = inventoryRepository.findById(inventoryId);
         if(dbInventory.isEmpty()){
             throw new RecordNotFoundException("Inventory with id " + inventoryId + " does not exist");
@@ -42,7 +44,7 @@ public class InventoryController {
 
     @DeleteMapping("/inventories/{inventoryId}")
     public String deleteInventory(@PathVariable Long inventoryId){
-        System.out.println("InventoryController - deleteInventory()");
+        log.info("InventoryController - deleteInventory()");
         Optional<Inventory> dbInventory = inventoryRepository.findById(inventoryId);
         if(dbInventory.isEmpty()){
             throw new RecordNotFoundException("Inventory with id" + inventoryId + " does not exist");

@@ -6,25 +6,25 @@ import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.AddressRepository;
 import com.crm.repository.StaffRepository;
 import com.crm.repository.StoreRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class StaffServiceImpl {
-    @Autowired
-    private StaffRepository staffRepository;
 
-    @Autowired
-    private AddressRepository addressRepository;
+    private final StaffRepository staffRepository;
 
-    @Autowired
-    private StoreRepository storeRepository;
+    private final AddressRepository addressRepository;
+
+    private final StoreRepository storeRepository;
 
     public List<Staff> fetchStaffs(){
         return staffRepository.findAll();
@@ -58,7 +58,7 @@ public class StaffServiceImpl {
             throw new RecordNotFoundException("Customer with id " + staff.getStaffId() + " does not exist");
         }
         //check if the changed email matches with any other email
-        Staff existedEmail = staffRepository.findByEmaiExcludeId(staff.getEmail(), staff.getStaffId());
+        Staff existedEmail = staffRepository.findByEmailExcludeId(staff.getEmail(), staff.getStaffId());
         if(existedEmail != null){
             throw new DuplicateEmailException("Email " + staff.getEmail() + " existed");
         }

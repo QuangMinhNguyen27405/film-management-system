@@ -7,17 +7,17 @@ import com.crm.security.SecurityUtils;
 import com.crm.service.impl.CategoryService;
 import com.crm.service.impl.FilmServiceImpl;
 import com.crm.service.impl.StoreService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log4j2
 @Controller
 @CrossOrigin("*")
 public class FilmController
@@ -56,7 +56,7 @@ public class FilmController
     @GetMapping("/films/film/{filmId}")
     public String showFilmDetails(@PathVariable Long filmId, Model model,
                                   @RequestParam(value = "status", required = false) String status){
-        System.out.println("showFilmDetails filmId = " + filmId);
+        log.info("showFilmDetails filmId = " + filmId);
 
         Authentication auth = securityUtils.getUserAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -83,10 +83,10 @@ public class FilmController
 
     @PostMapping("/films/film/{filmId}/rent")
     public String rentFilm(@PathVariable Long filmId, @RequestParam Long storeId, Model model){
-        System.out.println("rentFilm() - RentFilm filmId = " + filmId + ", store = " + storeId);
+        log.info("rentFilm() - RentFilm filmId = " + filmId + ", store = " + storeId);
 
         String status = filmServiceImpl.rentFilm(filmId, storeId);
-        System.out.println("Status = " + status);
+        log.info("Status = " + status);
 
         return "redirect:/films/film/" + filmId + "?status=" + status;
     }
