@@ -1,6 +1,7 @@
 package com.crm.exception.handler;
 
 import com.crm.exception.custom.DuplicateEmailException;
+import com.crm.exception.custom.OutOfStockException;
 import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.exception.response.ErrorResponse;
 import com.crm.exception.response.ErrorType;
@@ -29,6 +30,16 @@ public class GlobalRestControllerAdvice {
         errorResponse.setCreatedDTM(DateUtils.getLocalDateTime());
         errorResponse.setErrorType(ErrorType.SERVICE_EXCEPTION);
         errorResponse.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorResponse.setErrorMessage(ex.getMessage());
+        return errorResponse;
+    }
+
+    @ExceptionHandler(OutOfStockException.class)
+    private ErrorResponse handleOutOfStockException(Exception ex){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setCreatedDTM(DateUtils.getLocalDateTime());
+        errorResponse.setErrorType(ErrorType.SERVICE_EXCEPTION);
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setErrorMessage(ex.getMessage());
         return errorResponse;
     }

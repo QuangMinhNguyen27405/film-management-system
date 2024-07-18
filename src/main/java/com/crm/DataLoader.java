@@ -34,7 +34,7 @@ public class DataLoader implements CommandLineRunner {
     private CustomerService customerService;
 
     @Autowired
-    private FilmService filmService;
+    private FilmServiceImpl filmServiceImpl;
 
     @Autowired
     private InventoryRepository inventoryRepository;
@@ -60,6 +60,7 @@ public class DataLoader implements CommandLineRunner {
         loadFilms();
         loadStore();
         loadStaffs();
+        loadInventorys();
     }
 
     private void loadCategories() {
@@ -188,7 +189,7 @@ public class DataLoader implements CommandLineRunner {
     }
 
     public void loadFilms() {
-        if(filmService.fetchFilms().isEmpty()){
+        if(filmServiceImpl.fetchFilms().isEmpty()){
 
             Film filmTheCroods = new Film();
             filmTheCroods.setTitle("The Croods");
@@ -255,7 +256,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmTheCroods.setRating(3L);
 
-            filmService.createFilm(filmTheCroods);
+            filmServiceImpl.createFilm(filmTheCroods);
 
             Film filmTheHobbit = new Film();
             filmTheHobbit.setTitle("The Hobbit");
@@ -322,7 +323,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmTheHobbit.setRating(5L);
 
-            filmService.createFilm(filmTheHobbit);
+            filmServiceImpl.createFilm(filmTheHobbit);
 
             // Film Maleficent
             Film filmMaleficent = new Film();
@@ -390,7 +391,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmMaleficent.setRating(4L);
 
-            filmService.createFilm(filmMaleficent);
+            filmServiceImpl.createFilm(filmMaleficent);
 
 
             // Film Life of Pi
@@ -459,7 +460,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmLifeOfPi.setRating(4L);
 
-            filmService.createFilm(filmLifeOfPi);
+            filmServiceImpl.createFilm(filmLifeOfPi);
 
             // Film Exists
             Film filmExists = new Film();
@@ -525,7 +526,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmExists.setRating(3L);
 
-            filmService.createFilm(filmExists);
+            filmServiceImpl.createFilm(filmExists);
 
             // Film Robocop
             Film filmRobocop = new Film();
@@ -591,7 +592,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmRobocop.setRating(3L);
             
-            filmService.createFilm(filmRobocop);
+            filmServiceImpl.createFilm(filmRobocop);
             
             
             // Film Drive Hard
@@ -658,7 +659,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmDriveHard.setRating(3L);
             
-            filmService.createFilm(filmDriveHard);
+            filmServiceImpl.createFilm(filmDriveHard);
             
             
             // Film The Colony
@@ -727,7 +728,7 @@ public class DataLoader implements CommandLineRunner {
             // Rating
             filmTheColony.setRating(3L);
             
-            filmService.createFilm(filmTheColony);
+            filmServiceImpl.createFilm(filmTheColony);
 
             // Film Tin Tin
             Film filmTintin = new Film();
@@ -792,7 +793,7 @@ public class DataLoader implements CommandLineRunner {
             filmTintin.setRating(4L);
 
             // Save the film
-            filmService.createFilm(filmTintin);
+            filmServiceImpl.createFilm(filmTintin);
         }
     }
 
@@ -902,7 +903,7 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadInventorys(){
         if(inventoryServiceImpl.fetchInventory().isEmpty()){
-            List<Film> filmList = filmService.fetchFilms();
+            List<Film> filmList = filmServiceImpl.fetchFilms();
 
             for (int i = 1; i <= 30; i++) {
                 Inventory inventory = new Inventory();

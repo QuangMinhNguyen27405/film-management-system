@@ -74,26 +74,22 @@ public class CustomerController {
     }
 
     @GetMapping("/login")
-    private String showLoginForm(HttpServletRequest request, Model model){
+    private String showLoginForm(HttpServletRequest request,
+                                 Model model,
+                                 @RequestParam(value = "status", required = false) String status){
+
         Authentication auth = securityUtils.getUserAuthentication();
         if(!(auth instanceof AnonymousAuthenticationToken)){
             return "redirect:/home";
         }
+
         model.addAttribute("login", false);
         model.addAttribute("pageTitle", "Log In");
 
-        return "login";
-    }
-
-    @GetMapping("/login?error")
-    private String showLoginFormError(HttpServletRequest request, Model model){
-        Authentication auth = securityUtils.getUserAuthentication();
-        if(!(auth instanceof AnonymousAuthenticationToken)){
-            return "redirect:/home";
+        if (status != null) {
+            model.addAttribute(status, true);
         }
 
-        model.addAttribute("pageTitle", "Log In");
-        model.addAttribute("param.error", true);
         return "login";
     }
 
@@ -122,10 +118,12 @@ public class CustomerController {
             // Redirect to Home Page
             return "redirect:/home";
         } catch (AuthenticationException e) {
+            String status = new String("invalid_email_password");
             // Redirect to Log In Error URL
-            return "redirect:/login?error";
+            return "redirect:/login?status=" + status;
         } catch (Exception e){
-            return "redirect:/login?error";
+            String status = new String("login_error");
+            return "redirect:/login?status=" + status;
         }
 
     }
@@ -148,11 +146,11 @@ public class CustomerController {
         System.out.println("CustomerController - updateCustomer()");
         try {
             customerService.updateCustomer(customer);
-            return "profile/" + customerId;
+            return "redirect:/profile/" + customerId;
         } catch (RecordNotFoundException ex){
-            return "profile/" + customerId;
+            return "redirect:/profile/" + customerId;
         } catch (DuplicateEmailException ex) {
-            return "profile/" + customerId;
+            return "redirect:/profile/" + customerId;
         }
     }
 

@@ -2,8 +2,10 @@ package com.crm.service.impl;
 
 import com.crm.entity.Address;
 import com.crm.entity.Store;
+import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.AddressRepository;
 import com.crm.repository.StoreRepository;
+import org.antlr.v4.runtime.RecognitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,5 +33,13 @@ public class StoreService {
             dbAddress.ifPresent(store::setAddress);
         }
         return storeRepository.save(store);
+    }
+
+    public Store findStoreById(Long storeId){
+        Optional<Store> dbStore = storeRepository.findById(storeId);
+        if(dbStore.isEmpty()) {
+            throw new RecordNotFoundException("Store with id " + storeId + " not found");
+        }
+        return dbStore.get();
     }
 }

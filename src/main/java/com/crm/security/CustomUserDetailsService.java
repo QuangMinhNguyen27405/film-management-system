@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,8 +24,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Customer customer = customerRepository.findByEmail(email);
-        if(customer != null){
+        Optional<Customer> dbCustomer = customerRepository.findByEmail(email);
+        if(dbCustomer.isPresent()){
+            Customer customer = dbCustomer.get();
             System.out.println("Found User With Email " + email + " and Password " + customer.getPassword());
             return new UserPrincipal(customer);
         } else {

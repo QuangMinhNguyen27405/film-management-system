@@ -25,6 +25,7 @@
                             </option>
                         </select>
                     </div>
+
                     <div class="movie-list">
                         <div class="movie" th:each="film : ${filmList}">
                             <figure class="movie-poster"><img th:src="${film.logoUrl}" alt="#"></figure>
@@ -32,6 +33,7 @@
                             <p>[[${film.fullText}]]</p>
                         </div>
                     </div>
+
                 </div>
             </div> <!-- .container -->
         </main>

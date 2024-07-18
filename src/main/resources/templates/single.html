@@ -45,7 +45,30 @@
 
                                 <!-- Hire this movie button -->
                                 <div class="mt-4">
-                                    <a th:href="@{/hire/{filmId}(filmId=${film.filmId})}" class="button">Hire this Movie</a>
+                                    <form th:action="@{/films/film/{filmId}/rent(filmId=${film.filmId})}" method="post">
+                                        <button type="submit" class="button mb-2">Hire this Movie</button>
+
+                                        <h5 class="my-2">Select a Store To Pick Up</h5>
+
+                                        <select name="storeId" class="mb-3">
+                                            <option th:each="store : ${storeList}"
+                                                    th:value="${store.storeId}"
+                                                    th:text="${store.address.address}"></option>
+                                        </select>
+
+                                        <div th:if="${not_signed_in}" class="text text-danger">
+                                            Must Sign In To Proceed
+                                        </div>
+
+                                        <div th:if="${out_of_stock}" class="text text-danger">
+                                            Out Of Stock For This Film
+                                        </div>
+
+                                        <div th:if="${success}" class="text text-success">
+                                            Rent Successfully
+                                        </div>
+
+                                    </form>
                                 </div>
 
                             </div>

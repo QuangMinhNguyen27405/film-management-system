@@ -86,16 +86,16 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public Customer signIn(String email, String password){
-        Customer customer = customerRepository.findByEmail(email);
-        if(customer != null && password.equals( customer.getPassword() ) ){
-            return customer;
-        }
-        return null;
-    }
-
     public Page<Customer> findPaginated(int pageNo, int pageSize){
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.customerRepository.findAll(pageable);
+    }
+
+    public Customer findCustomerByEmail(String email){
+        Optional<Customer> dbCustomer = customerRepository.findByEmail(email);
+        if(dbCustomer.isEmpty()){
+            throw new RecordNotFoundException("Customer with email " + email + " does not exist");
+        }
+        return dbCustomer.get();
     }
 }

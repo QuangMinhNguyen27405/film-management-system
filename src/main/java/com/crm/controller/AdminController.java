@@ -8,7 +8,7 @@ import com.crm.repository.LanguageRepository;
 import com.crm.repository.RoleRepository;
 import com.crm.service.impl.CategoryService;
 import com.crm.service.impl.CustomerService;
-import com.crm.service.impl.FilmService;
+import com.crm.service.impl.FilmServiceImpl;
 import com.crm.service.impl.StaffServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -34,7 +34,7 @@ public class AdminController {
     private StaffServiceImpl staffServiceImpl;
 
     @Autowired
-    private FilmService filmService;
+    private FilmServiceImpl filmServiceImpl;
 
     @Autowired
     private CategoryService categoryService;
@@ -165,7 +165,7 @@ public class AdminController {
 
         int pageSize = 4;
 
-        Page<Film> page = filmService.findPaginated(pageNo, pageSize);
+        Page<Film> page = filmServiceImpl.findPaginated(pageNo, pageSize);
         List<Film> filmList = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
@@ -181,7 +181,7 @@ public class AdminController {
     public Film findFilm(@PathVariable Long filmId){
         System.out.println("FilmControl - findFilm()");
         try{
-            return filmService.findFilm(filmId);
+            return filmServiceImpl.findFilm(filmId);
         } catch (RecordNotFoundException ex){
             return null;
         }
@@ -206,7 +206,7 @@ public class AdminController {
 
         System.out.println("FilmControl - doCreateFilm()");
         try {
-            filmService.createFilm(film);
+            filmServiceImpl.createFilm(film);
             return "redirect:/admin/films/page";
         } catch (Exception ex){
             return "redirect:/admin/films/page";
@@ -217,7 +217,7 @@ public class AdminController {
     @GetMapping("/films/update/{filmId}")
     private String showUpdateFilm(@PathVariable Long filmId, Model model){
 
-        Film film = filmService.findFilm(filmId);
+        Film film = filmServiceImpl.findFilm(filmId);
         List<Category> categories = categoryRepository.findAll();
         List<Language> languages = languageRepository.findAll();
 
@@ -234,7 +234,7 @@ public class AdminController {
 
         System.out.println("FilmControl - doUpdateFilm()");
         try {
-            filmService.updateFilm(film);
+            filmServiceImpl.updateFilm(film);
             return "redirect:/admin/films/page";
         } catch (Exception ex){
             return "redirect:/admin/films/page";

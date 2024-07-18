@@ -27,6 +27,10 @@ public class Rental {
     @JoinColumn(name = "inventory_id", referencedColumnName = "inventory_id")
     private Inventory inventory;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id", referencedColumnName = "store_id")
+    private Store store;
+
     @Column(name = "rental_date")
     private LocalDate rentalDate;
 

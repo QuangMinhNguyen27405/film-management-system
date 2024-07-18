@@ -1,7 +1,6 @@
 package com.crm.service.impl;
 
 import com.crm.entity.Category;
-import com.crm.entity.Customer;
 import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
