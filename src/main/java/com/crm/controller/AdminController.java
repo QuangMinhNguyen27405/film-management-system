@@ -142,7 +142,7 @@ public class AdminController {
     }
 
     // Deactivate Status Of Customer
-    @GetMapping("customers/deactivate/{customerId}")
+    @GetMapping("/customers/deactivate/{customerId}")
     public String deactivateCustomer(@PathVariable Long customerId){
         log.info(("Admin Controller - deactivateCustomer()"));
         try {

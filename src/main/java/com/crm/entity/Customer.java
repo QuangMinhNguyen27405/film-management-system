@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class Customer {
     private boolean active;
 
     @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name="customers_roles",
             joinColumns={@JoinColumn(name="customer_id", referencedColumnName="customer_id")},

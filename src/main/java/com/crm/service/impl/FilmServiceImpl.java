@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Log4j2
 @Component
@@ -135,8 +136,10 @@ public class FilmServiceImpl {
         if(dbInventoryList.isEmpty()){
             throw new OutOfStockException();
         }
+
         for(Inventory inventory : dbInventoryList){
-            if(inventory.getRentals() == null){
+            Set<Rental> rentalList = inventory.getRentals();
+            if(rentalList.isEmpty()){
                 return inventory;
             }
         }

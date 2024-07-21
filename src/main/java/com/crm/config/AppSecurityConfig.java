@@ -46,6 +46,11 @@ public class AppSecurityConfig {
                         .requestMatchers("/films/film/*/rent/").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                 )
+                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
+                        .loginPage("/login")
+                        .usernameParameter("email")
+                        .successHandler(new CustomAuthenticationSuccessHandler())
+                        .permitAll())
                 .logout(lOut -> lOut
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)

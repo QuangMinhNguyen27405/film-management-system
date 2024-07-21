@@ -20,7 +20,7 @@ public class Payment {
     @Column(name = "payment_id")
     private Long paymentId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "rental_id", referencedColumnName = "rental_id")
     private Rental rental;
 
