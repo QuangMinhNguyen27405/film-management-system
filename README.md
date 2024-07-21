@@ -1,8 +1,5 @@
 # Film Rental Project
 
-## Link To Application: 
-http://film-management-system-env.eba-n3bm7m7u.us-east-1.elasticbeanstalk.com/home
-
 ## Description
 The Film Rental Project is a web application designed to manage a film rental business. It allows users to browse available films, rent films, and return rented films. Administrators can manage the inventory, track rentals, and view reports.
 
