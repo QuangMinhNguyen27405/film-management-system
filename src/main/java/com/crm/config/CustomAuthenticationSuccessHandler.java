@@ -24,7 +24,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        for (final GrantedAuthority authority : authorities) {
+            String authorityName = authority.getAuthority();
+            if(authorityName.equals("ROLE_ADMIN")) {
+                this.adminSuccessHandler.onAuthenticationSuccess(request, response, authentication);
+                return;
+            }
+        }
+        this.userSuccessHandler.onAuthenticationSuccess(request, response, authentication);
     }
 
     @Override

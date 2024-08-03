@@ -43,8 +43,9 @@ public class AppSecurityConfig {
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/fonts/**", "/dummy/**", "/images/**").permitAll()
                         .requestMatchers("/customer/profile/*").hasRole("USER")
-                        .requestMatchers("/films/film/*/rent/").hasRole("USER")
+                        .requestMatchers("/films/film/*/rent").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
                         .loginPage("/login")
