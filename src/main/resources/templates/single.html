@@ -73,11 +73,18 @@
 
                             </div>
                         </div> <!-- .row -->
-                        <div class="related-movies">
-                            <h3>Related Movies</h3>
-                            <!-- Reserved for Related movies section -->
+                    </div>
+
+                    <h3 class="my-4">Relevant Films</h3>
+
+                    <div class="movie-list">
+                        <div class="movie" th:each="film : ${relevantFilm}">
+                            <figure class="movie-poster"><img th:src="${film.logoUrl}" alt="#"></figure>
+                            <div class="movie-title"><a th:href="'/films/film/' + ${film.filmId}">[[${film.title}]]</a></div>
+                            <p>[[${film.fullText}]]</p>
                         </div>
                     </div>
+
                 </div>
             </div> <!-- .container -->
         </main>

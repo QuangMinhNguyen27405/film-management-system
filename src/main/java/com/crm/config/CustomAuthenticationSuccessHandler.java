@@ -14,18 +14,13 @@ import java.io.IOException;
 import java.util.Collection;
 
 @Component
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     SimpleUrlAuthenticationSuccessHandler userSuccessHandler
             = new SimpleUrlAuthenticationSuccessHandler("/home");
 
     SimpleUrlAuthenticationSuccessHandler adminSuccessHandler
             = new SimpleUrlAuthenticationSuccessHandler("/admin/customers/page");
-
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
-    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

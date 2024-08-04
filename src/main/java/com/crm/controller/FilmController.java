@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -68,11 +69,36 @@ public class FilmController
         List<Store> storeList = storeService.fetchStores();
         model.addAttribute("storeList", storeList);
 
+        // show film details
         Film film = filmServiceImpl.findFilm(filmId);
         if(film != null) {
             model.addAttribute("film", film);
             model.addAttribute("pageTitle", film.getTitle());
         }
+
+        // show related films
+        if (film != null) {
+            List<Category> categoryList = film.getCategories();
+            List<Film> relevantFilm = new ArrayList<>();
+
+            for (Category category : categoryList) {
+
+                List<Film> filmList = filmServiceImpl.findFilmByCategory(category.getName());
+
+                for (Film film1 : filmList) {
+                    if(film1.getFilmId() != film.getFilmId()){
+                        relevantFilm.add(film1);
+                    }
+                    if(relevantFilm.size() == 4) break;
+                }
+
+                if(relevantFilm.size() == 4) break;
+            }
+
+            model.addAttribute("relevantFilm", relevantFilm);
+
+        }
+
         // status handling
         if(status != null) {
             model.addAttribute(status, true);

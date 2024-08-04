@@ -2,10 +2,12 @@ package com.crm.service.impl;
 
 import com.crm.entity.Address;
 import com.crm.entity.Customer;
+import com.crm.entity.Role;
 import com.crm.exception.custom.DuplicateEmailException;
 import com.crm.exception.custom.RecordNotFoundException;
 import com.crm.repository.AddressRepository;
 import com.crm.repository.CustomerRepository;
+import com.crm.repository.RoleRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +31,8 @@ public class CustomerService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public List<Customer> fetchCustomers(){
         return customerRepository.findAll();
@@ -51,6 +56,13 @@ public class CustomerService {
             String address = customer.getAddress().getAddress();
             Optional<Address> dbAddress = addressRepository.findByAddress(address);
             dbAddress.ifPresent(customer::setAddress);
+        }
+        // assign User Role
+        if(customer.getRoles().isEmpty()) {
+            Optional<Role> dbRole = roleRepository.findById(2L);
+            List<Role> dbRoles = new ArrayList<>();
+            dbRole.ifPresent(dbRoles::add);
+            customer.setRoles(dbRoles);
         }
         // encode user password
         String encodedPassword = passwordEncoder.encode(customer.getPassword());
